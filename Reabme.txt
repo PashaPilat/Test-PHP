@@ -1,0 +1,150 @@
+README — Проект «Категории и товары»
+Задача
+Новый проект на чистом PHP. Цель — реализовать страницу каталога товаров и категорий (пример: demo.solomono.net).
+Функциональные требования:
+Создать таблицы товаров и категорий в базе данных, связать их отношением «один‑ко‑многим».
+Заполнить БД тестовыми данными: 10–20 товаров (с датой, ценой, названием) и 3–5 категорий.
+Вывести страницу:
+слева список категорий с количеством товаров в каждой;
+справа список товаров.
+При клике на категорию — AJAX‑обновление списка товаров справа.
+Добавить селектбокс сортировки: «дешевле», «по алфавиту», «новые».
+При выборе сортировки — обновлять список товаров без перезагрузки.
+У каждого товара кнопка «Купить» → модальное окно Bootstrap с информацией о товаре.
+Обязательно:
+использовать ООП;
+чистый PHP (без фреймворков);
+сортировка и фильтрация без перезагрузки страницы;
+передача данных PHP → JS в формате JSON.
+Дополнительно: при смене категории/сортировки добавлять GET‑параметры в URL, чтобы при перезагрузке оставаться на выбранной категории/сортировке.
+Текущая структура проекта
+Код
+project/
+│
+├── public/
+│   ├── index.php          # Точка входа, рендерит базовую страницу
+│   ├── js/
+│   │   └── app.js         # Логика AJAX, сортировка, модалка
+│   ├── css/
+│   │   └── style.css      # Стили
+│   └── assets/            # картинки, иконки
+│
+├── src/
+│   ├─ DB/
+ │   │   ├─ Contracts/
+ │   │   │   ├─ SelectBuilderContract.php
+ │   │   │   ├─ WhereContract.php
+ │   │   │   ├─ JoinContract.php
+ │   │   │   ├─ HavingContract.php
+ │   │   │   └─ OrderByContract.php
+ │   │   ├─ Select/
+ │   │   │   ├─ Builder.php
+ │   │   │   ├─ Join.php
+ │   │   │   ├─ GroupBy.php
+ │   │   │   ├─ Having.php
+ │   │   │   ├─ OrderBy.php
+ │   │   │   ├─ Limit.php
+ │   │   │   └─ Offset.php
+ │   │   └─ Tools/
+ │   │       ├─ Where.php
+ │   │       └─ Enums/
+ │   │           ├─ Boolean.php
+ │   │           ├─ WhereOperator.php
+ │   │           ├─ JoinOperator.php
+ │   │           ├─ JoinType.php
+ │   │           └─ OrderDirection.php
+│   ├── Models/
+│   │   ├── Category.php   # Класс категории
+│   │   └── Product.php    # Класс товара
+│   ├── Controllers/
+│   │   └── ApiController.php # Обработка AJAX-запросов, отдаёт JSON
+│   └── Helpers/
+│       └── Response.php   # Вспомогательные функции (json_encode и т.п.)
+│
+├── views/
+│   ├── layout.php         # Общий шаблон (header/footer)
+│   ├── categories.php     # Список категорий
+│   └── products.php       # Список товаров
+│
+├── migrations/
+│   └── 001_create_tables.php
+│
+└── config/
+    └── db.php             # Настройки подключения к БД
+
+Архитектура билдера
+Билдер (src/DB/Select/Builder.php) реализует fluent‑интерфейс для построения SQL‑запросов.
+Он разбит на отдельные классы по частям SQL:
+
+Where (Tools/Where.php) — условия фильтрации.
+
+Join (Select/Join.php) — соединения таблиц.
+
+GroupBy / Having — группировка и агрегаты.
+
+OrderBy — сортировка.
+
+Limit / Offset — постраничная выборка.
+
+Для строгой типизации используются enum (в папке Tools/Enums):
+
+JoinType — INNER, LEFT, RIGHT, FULL.
+
+JoinOperator — EQ, NEQ, GT, LT и т.д.
+
+WhereOperator — EQ, LIKE, IN и т.д.
+
+Boolean — AND, OR.
+
+OrderDirection — ASC, DESC.
+
+Примеры использования
+Простая выборка
+php
+$rows = DB::select('id', 'name')
+    ->from('products')
+    ->where('status', 'active')
+    ->orderBy('price', OrderDirection::ASC)
+    ->all();
+SQL:
+
+sql
+SELECT id, name FROM products WHERE status = ? ORDER BY price ASC
+JOIN
+php
+$rows = DB::select('*')
+    ->from('categories')
+    ->join('products', 'categories.id', 'products.category_id', JoinOperator::EQ, JoinType::INNER)
+    ->all();
+SQL:
+
+sql
+SELECT * FROM categories
+INNER JOIN products ON categories.id = products.category_id
+Пагинация
+php
+$pageRows = DB::select('*')
+    ->from('products')
+    ->where('status', 'active')
+    ->paginate(2, 10); // страница 2, по 10 строк
+SQL:
+
+sql
+SELECT * FROM products WHERE status = ? LIMIT 10 OFFSET 10
+HAVING
+php
+$rows = DB::select('category_id, COUNT(*) as cnt')
+    ->from('products')
+    ->groupBy('category_id')
+    ->having('COUNT(*)', 5, WhereOperator::GT)
+    ->all();
+SQL:
+
+sql
+SELECT category_id, COUNT(*) as cnt
+FROM products
+GROUP BY category_id
+HAVING COUNT(*) > ?
+Итог
+Билдер позволяет собирать сложные SQL‑запросы в стиле fluent‑интерфейса, с строгой типизацией через enum и разделением логики по классам. 
+Это делает код читаемым, расширяемым и безопасным.

@@ -1,0 +1,10 @@
+{
+  "name": "pasha/test-php",
+  "description": "Тестовый проект на чистом PHP",
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/"
+    }
+  },
+  "require": {}
+}
