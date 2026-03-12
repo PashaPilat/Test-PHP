@@ -1,4 +1,5 @@
 <?php
+
 namespace App\DB\Update;
 
 use App\DB;
@@ -12,7 +13,8 @@ use App\DB\Contracts\UpdateBuilderContract;
  * Класс для построения и выполнения UPDATE‑запросов.
  * Поддерживает fluent‑интерфейс, условия WHERE и группы условий.
  */
-class Builder implements UpdateBuilderContract {
+class Builder implements UpdateBuilderContract
+{
     /** @var string Имя таблицы */
     private string $table;
 
@@ -27,7 +29,8 @@ class Builder implements UpdateBuilderContract {
      *
      * @param string $table Имя таблицы
      */
-    public function __construct(string $table) {
+    public function __construct(string $table)
+    {
         $this->table = $table;
         $this->where = new Where();
         DB::getToSql()?->add('update', "UPDATE {$this->table}");
@@ -39,7 +42,8 @@ class Builder implements UpdateBuilderContract {
      * @param array $values Ассоциативный массив колонка => значение
      * @return self
      */
-    public function set(array $values): self {
+    public function set(array $values): self
+    {
         $setParts = [];
         foreach ($values as $col => $val) {
             $setParts[] = "{$col} = ?";
@@ -49,50 +53,58 @@ class Builder implements UpdateBuilderContract {
         return $this;
     }
 
-/** @inheritdoc */
-    public function where(string $col, mixed $val, WhereOperator $operator = WhereOperator::EQ): self {
+    /** @inheritdoc */
+    public function where(string $col, mixed $val, WhereOperator $operator = WhereOperator::EQ): self
+    {
         $this->where->add($col, $val, $operator, Boolean::AND);
         return $this;
     }
 
     /** @inheritdoc */
-    public function whereOr(string $col, mixed $val, WhereOperator $operator = WhereOperator::EQ): self {
+    public function whereOr(string $col, mixed $val, WhereOperator $operator = WhereOperator::EQ): self
+    {
         $this->where->add($col, $val, $operator, Boolean::OR);
         return $this;
     }
 
     /** @inheritdoc */
-    public function whereById(int $id): self {
+    public function whereById(int $id): self
+    {
         $this->where->whereById($id);
         return $this;
     }
 
     /** @inheritdoc */
-    public function whereIsActive(bool $flag): self {
+    public function whereIsActive(bool $flag): self
+    {
         $this->where->whereIsActive($flag);
         return $this;
     }
 
     /** @inheritdoc */
-    public function group(Boolean $boolean = Boolean::AND): self {
+    public function group(Boolean $boolean = Boolean::AND): self
+    {
         $this->where->group($boolean);
         return $this;
     }
 
     /** @inheritdoc */
-    public function groupEnd(): self {
+    public function groupEnd(): self
+    {
         $this->where->groupEnd();
         return $this;
     }
 
     /** @inheritdoc */
-    public function andGroup(): self {
+    public function andGroup(): self
+    {
         $this->where->andGroup();
         return $this;
     }
 
     /** @inheritdoc */
-    public function orGroup(): self {
+    public function orGroup(): self
+    {
         $this->where->orGroup();
         return $this;
     }
@@ -102,7 +114,8 @@ class Builder implements UpdateBuilderContract {
      *
      * @return string SQL‑код
      */
-    public function toSql(): string {
+    public function toSql(): string
+    {
         return DB::getToSql()->getSql();
     }
 
@@ -111,7 +124,8 @@ class Builder implements UpdateBuilderContract {
      *
      * @return string SQL‑код с параметрами
      */
-    public function toSqlStr(): string {
+    public function toSqlStr(): string
+    {
         return DB::getToSql()->getSqlStr();
     }
 
@@ -120,8 +134,14 @@ class Builder implements UpdateBuilderContract {
      *
      * @return int|false Количество затронутых строк или false при ошибке
      */
-    public function exec(): int|false {
-        $stmt = Query::run($this->toSql(), DB::getToSql()->getParams());
+    public function exec(): int|false
+    {
+        // Получаем SQL и параметры
+        $sql    = $this->toSql();
+        $params = DB::getToSql()->getParams();
+
+        // Выполняем запрос
+        $stmt = Query::run($sql, $params);
         return $stmt ? $stmt->rowCount() : false;
     }
 }

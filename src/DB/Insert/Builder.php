@@ -1,4 +1,5 @@
 <?php
+
 namespace App\DB\Insert;
 
 use App\DB;
@@ -10,7 +11,8 @@ use InvalidArgumentException;
  * Класс для построения и выполнения INSERT‑запросов.
  * Поддерживает вставку одной строки или нескольких строк.
  */
-class Builder implements InsertBuilderContract {
+class Builder implements InsertBuilderContract
+{
     /** @var string|null Имя таблицы */
     private ?string $table = null;
 
@@ -26,7 +28,8 @@ class Builder implements InsertBuilderContract {
      * @param array $values Ассоциативный массив (одна строка) или массив массивов (несколько строк)
      * @throws InvalidArgumentException Если массив пустой или некорректный
      */
-    public function __construct(array $values) {
+    public function __construct(array $values)
+    {
         if (empty($values)) {
             throw new InvalidArgumentException("Insert values cannot be empty");
         }
@@ -52,7 +55,8 @@ class Builder implements InsertBuilderContract {
      * @return self
      * @throws InvalidArgumentException Если имя таблицы пустое
      */
-    public function into(string $table): self {
+    public function into(string $table): self
+    {
         if (empty($table)) {
             throw new InvalidArgumentException("Table name cannot be empty");
         }
@@ -83,7 +87,8 @@ class Builder implements InsertBuilderContract {
      *
      * @return string SQL‑код
      */
-    public function toSql(): string {
+    public function toSql(): string
+    {
         return DB::getToSql()->getSql();
     }
 
@@ -92,7 +97,8 @@ class Builder implements InsertBuilderContract {
      *
      * @return string SQL‑код с параметрами
      */
-    public function toSqlStr(): string {
+    public function toSqlStr(): string
+    {
         return DB::getToSql()->getSqlStr();
     }
 
@@ -101,8 +107,14 @@ class Builder implements InsertBuilderContract {
      *
      * @return int|false ID вставленной строки или false при ошибке
      */
-    public function exec(): int|false {
-        $stmt = Query::run($this->toSql(), DB::getToSql()->getParams());
+    public function exec(): int|false
+    {
+        // Получаем SQL и параметры
+        $sql    = $this->toSql();
+        $params = DB::getToSql()->getParams();
+
+        // Выполняем запрос
+        $stmt = Query::run($sql, $params);
         return $stmt ? (int) \App\DB\Connect::pdo()->lastInsertId() : false;
     }
 }

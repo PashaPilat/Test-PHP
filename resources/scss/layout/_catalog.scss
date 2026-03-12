@@ -1,0 +1,31 @@
+.catalog-page {
+
+    display:flex;
+    gap:30px;
+
+}
+
+.catalog-products {
+
+    flex:1;
+
+}
+.catalog-title{
+
+    font-size:24px;
+
+    font-weight:600;
+
+    margin-bottom:20px;
+
+}
+
+.product-grid {
+
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:20px;
+
+}

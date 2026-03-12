@@ -10,10 +10,8 @@ use App\DB\Tools\ToSql;
 interface DBContract {
     /**
      * Инициализирует подключение к базе данных.
-     *
-     * @param array $config Конфигурация подключения (dsn, user, password и т.д.)
      */
-    public static function connect(array $config): void;
+    public static function connect(): void;
 
     /**
      * Создаёт SELECT‑запрос.

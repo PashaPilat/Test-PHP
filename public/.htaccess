@@ -1,0 +1,10 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Если файл или папка существует, отдаем напрямую
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+
+    # Все остальное на index.php
+    RewriteRule ^ index.php [L]
+</IfModule>

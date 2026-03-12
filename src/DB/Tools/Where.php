@@ -1,4 +1,5 @@
 <?php
+
 namespace App\DB\Tools;
 
 use App\DB;
@@ -11,7 +12,8 @@ use InvalidArgumentException;
  * Класс для построения условий WHERE в SQL‑запросах.
  * Поддерживает группы условий, алиасы для частых проверок и безопасную работу с параметрами.
  */
-class Where implements WhereContract {
+class Where implements WhereContract
+{
     /** 
      * @var array Условия WHERE (строки SQL‑фрагментов)
      */
@@ -46,9 +48,15 @@ class Where implements WhereContract {
             throw new InvalidArgumentException("Column name cannot be empty");
         }
 
-        $condition = "{$col} {$operator->value} ?";
+        if ($operator === WhereOperator::IS_NULL || $operator === WhereOperator::IS_NOT_NULL) {
+            $condition = "{$col} {$operator->value}";
+        } else {
+            $condition = "{$col} {$operator->value} ?";
+            $this->params[] = $val;
+        }
+
         if (!empty($this->groupStack)) {
-            $group =& $this->groupStack[count($this->groupStack)-1];
+            $group = &$this->groupStack[count($this->groupStack) - 1];
             if (!empty($group['conditions'])) {
                 $condition = $boolean->value . " " . $condition;
             }
@@ -60,8 +68,7 @@ class Where implements WhereContract {
             $this->conditions[] = $condition;
         }
 
-        $this->params[] = $val;
-        DB::getToSql()?->add('where', $this->getSql(), $this->params);
+        DB::getToSql()?->add('where', $this->getSql());
     }
 
     /**
@@ -69,14 +76,16 @@ class Where implements WhereContract {
      *
      * @param Boolean $boolean Логический оператор для группы (AND/OR)
      */
-    public function group(Boolean $boolean = Boolean::AND): void {
+    public function group(Boolean $boolean = Boolean::AND): void
+    {
         $this->groupStack[] = ['boolean' => $boolean->value, 'conditions' => []];
     }
 
     /**
      * Завершает группу условий и добавляет её в общий список.
      */
-    public function groupEnd(): void {
+    public function groupEnd(): void
+    {
         $group = array_pop($this->groupStack);
         if ($group) {
             $sql = "(" . implode(' ', $group['conditions']) . ")";
@@ -85,20 +94,22 @@ class Where implements WhereContract {
             }
             $this->conditions[] = $sql;
         }
-        DB::getToSql()?->add('where', $this->getSql(), $this->params);
+        DB::getToSql()?->add('where', $this->getSql());
     }
 
     /**
      * Удобный алиас для группы с AND.
      */
-    public function andGroup(): void {
+    public function andGroup(): void
+    {
         $this->group(Boolean::AND);
     }
 
     /**
      * Удобный алиас для группы с OR.
      */
-    public function orGroup(): void {
+    public function orGroup(): void
+    {
         $this->group(Boolean::OR);
     }
 
@@ -107,7 +118,8 @@ class Where implements WhereContract {
      *
      * @param bool $flag true для активных, false для неактивных
      */
-    public function whereIsActive(bool $flag): void {
+    public function whereIsActive(bool $flag): void
+    {
         if ($flag) {
             $this->add('status', 'active', WhereOperator::EQ);
         } else {
@@ -120,7 +132,8 @@ class Where implements WhereContract {
      *
      * @param int $id Идентификатор
      */
-    public function whereById(int $id): void {
+    public function whereById(int $id): void
+    {
         $this->add('id', $id, WhereOperator::EQ);
     }
 
@@ -129,7 +142,8 @@ class Where implements WhereContract {
      *
      * @return string SQL‑фрагмент
      */
-    public function getSql(): string {
+    public function getSql(): string
+    {
         return !empty($this->conditions) ? "WHERE " . implode(' ', $this->conditions) : '';
     }
 
@@ -138,7 +152,8 @@ class Where implements WhereContract {
      *
      * @return array Массив параметров
      */
-    public function getParams(): array {
+    public function getParams(): array
+    {
         return $this->params;
     }
 }

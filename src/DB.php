@@ -18,11 +18,9 @@ class DB implements DBContract {
 
     /**
      * Инициализирует подключение к базе данных.
-     *
-     * @param array $config Конфигурация подключения (dsn, user, password и т.д.)
      */
-    public static function connect(array $config): void {
-        Connect::init($config);
+    public static function connect(): void {
+        Connect::init();
     }
 
     /**

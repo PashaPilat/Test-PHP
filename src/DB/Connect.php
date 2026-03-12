@@ -13,17 +13,12 @@ class Connect implements ConnectContract {
     /**
      * Инициализирует подключение к базе данных.
      * Если соединение уже установлено, повторная инициализация не выполняется.
-     *
-     * @param array $config Конфигурация подключения:
-     *                      - dsn: строка DSN (например "mysql:host=localhost;dbname=test")
-     *                      - user: имя пользователя
-     *                      - pass: пароль
-     *
      * @throws RuntimeException Если подключение не удалось
      */
-    public static function init(array $config): void {
+    public static function init(): void {
         if (self::$pdo === null) {
             try {
+                $config = require BASE_PATH . '/config/db.php';
                 if (!isset($config['dsn'], $config['user'], $config['pass'])) {
                     throw new RuntimeException("Invalid DB config: missing dsn/user/pass");
                 }

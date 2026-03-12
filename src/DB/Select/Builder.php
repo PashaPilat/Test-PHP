@@ -1,4 +1,5 @@
 <?php
+
 namespace App\DB\Select;
 
 use App\DB;
@@ -17,7 +18,8 @@ use App\DB\Contracts\SelectBuilderContract;
  * Класс для построения и выполнения SELECT‑запросов.
  * Поддерживает fluent‑интерфейс, условия WHERE, JOIN, GROUP BY, HAVING, ORDER BY, LIMIT, OFFSET.
  */
-class Builder implements SelectBuilderContract {
+class Builder implements SelectBuilderContract
+{
     /** @var array Список колонок */
     private array $columns = ['*'];
 
@@ -50,7 +52,8 @@ class Builder implements SelectBuilderContract {
      *
      * @param array|string $columns Список колонок или одна колонка
      */
-    public function __construct(array|string $columns = ['*']) {
+    public function __construct(array|string $columns = ['*'])
+    {
         $this->columns = is_string($columns) ? [$columns] : $columns;
         $this->from = new From();
         $this->where = new Where();
@@ -70,77 +73,82 @@ class Builder implements SelectBuilderContract {
      * @return self
      * @throws InvalidArgumentException Если имя таблицы пустое
      */
-    public function from(string|array $table): self {
+    public function from(string|array $table): self
+    {
         if (is_string($table)) {
             if (empty($table)) {
                 throw new InvalidArgumentException("Table name cannot be empty");
             }
             $this->from->set($table);
         } elseif (is_array($table)) {
-            if (empty($table)) {
-                throw new InvalidArgumentException("Table list cannot be empty");
+            if (count($table) !== 2 || empty($table[0]) || empty($table[1])) {
+                throw new InvalidArgumentException("Array must be [table, alias]");
             }
-            foreach ($table as $t) {
-                if (empty($t)) {
-                    throw new InvalidArgumentException("Table name in list cannot be empty");
-                }
-                $this->from->set($t);
-            }
+            $this->from->set($table);
         } else {
             throw new InvalidArgumentException("from() accepts only string or array");
         }
         return $this;
     }
     /** @inheritdoc */
-    public function where(string $col, mixed $val, WhereOperator $operator = WhereOperator::EQ): self {
+    public function where(string $col, mixed $val, WhereOperator $operator = WhereOperator::EQ): self
+    {
         $this->where->add($col, $val, $operator, Boolean::AND);
         return $this;
     }
 
     /** @inheritdoc */
-    public function whereOr(string $col, mixed $val, WhereOperator $operator = WhereOperator::EQ): self {
+    public function whereOr(string $col, mixed $val, WhereOperator $operator = WhereOperator::EQ): self
+    {
         $this->where->add($col, $val, $operator, Boolean::OR);
         return $this;
     }
 
     /** @inheritdoc */
-    public function whereById(int $id): self {
+    public function whereById(int $id): self
+    {
         $this->where->whereById($id);
         return $this;
     }
 
     /** @inheritdoc */
-    public function whereIsActive(bool $flag): self {
+    public function whereIsActive(bool $flag = true): self
+    {
         $this->where->whereIsActive($flag);
         return $this;
     }
 
     /** @inheritdoc */
-    public function group(Boolean $boolean = Boolean::AND): self {
+    public function group(Boolean $boolean = Boolean::AND): self
+    {
         $this->where->group($boolean);
         return $this;
     }
 
     /** @inheritdoc */
-    public function groupEnd(): self {
+    public function groupEnd(): self
+    {
         $this->where->groupEnd();
         return $this;
     }
 
     /** @inheritdoc */
-    public function andGroup(): self {
+    public function andGroup(): self
+    {
         $this->where->andGroup();
         return $this;
     }
 
     /** @inheritdoc */
-    public function orGroup(): self {
+    public function orGroup(): self
+    {
         $this->where->orGroup();
         return $this;
     }
 
     /** @inheritdoc */
-    public function join(string|array $table, string $first, string $second, JoinOperator $operator = JoinOperator::EQ, JoinType $type = JoinType::INNER): self {
+    public function join(string|array $table, string $first, string $second, JoinOperator $operator = JoinOperator::EQ, JoinType $type = JoinType::INNER): self
+    {
         $this->join->add($table, $first, $second, $operator, $type);
         return $this;
     }
@@ -152,7 +160,8 @@ class Builder implements SelectBuilderContract {
      * @param string $second Правая колонка
      * @return self
      */
-    public function innerJoin(string|array $table, string $first, string $second): self {
+    public function innerJoin(string|array $table, string $first, string $second): self
+    {
         return $this->join($table, $first, $second, JoinOperator::EQ, JoinType::INNER);
     }
 
@@ -164,7 +173,8 @@ class Builder implements SelectBuilderContract {
      * @param string $second Правая колонка
      * @return self
      */
-    public function leftJoin(string|array $table, string $first, string $second): self {
+    public function leftJoin(string|array $table, string $first, string $second): self
+    {
         return $this->join($table, $first, $second, JoinOperator::EQ, JoinType::LEFT);
     }
 
@@ -176,7 +186,8 @@ class Builder implements SelectBuilderContract {
      * @param string $second Правая колонка
      * @return self
      */
-    public function rightJoin(string|array $table, string $first, string $second): self {
+    public function rightJoin(string|array $table, string $first, string $second): self
+    {
         return $this->join($table, $first, $second, JoinOperator::EQ, JoinType::RIGHT);
     }
 
@@ -188,36 +199,42 @@ class Builder implements SelectBuilderContract {
      * @param string $second Правая колонка
      * @return self
      */
-    public function fullJoin(string|array $table, string $first, string $second): self {
+    public function fullJoin(string|array $table, string $first, string $second): self
+    {
         return $this->join($table, $first, $second, JoinOperator::EQ, JoinType::FULL);
     }
 
     /** @inheritdoc */
-    public function groupBy(string $column): self {
+    public function groupBy(string $column): self
+    {
         $this->groupBy->add($column);
         return $this;
     }
 
     /** @inheritdoc */
-    public function having(string $condition, array $params = [], Boolean $boolean = Boolean::AND): self {
+    public function having(string $condition, array $params = [], Boolean $boolean = Boolean::AND): self
+    {
         $this->having->add($condition, $params, $boolean);
         return $this;
     }
 
     /** @inheritdoc */
-    public function orderBy(string|array $column, OrderDirection $direction = OrderDirection::ASC): self {
+    public function orderBy(string|array $column, OrderDirection $direction = OrderDirection::ASC): self
+    {
         $this->orderBy->set($column, $direction);
         return $this;
     }
 
     /** @inheritdoc */
-    public function limit(int $count): self {
+    public function limit(int $count): self
+    {
         $this->limit->set($count);
         return $this;
     }
 
     /** @inheritdoc */
-    public function offset(int $count): self {
+    public function offset(int $count): self
+    {
         $this->offset->set($count);
         return $this;
     }
@@ -230,7 +247,8 @@ class Builder implements SelectBuilderContract {
      * @return array
      * @throws InvalidArgumentException Если значения некорректны
      */
-    public function paginate(int $page, int $perPage): array {
+    public function paginate(int $page, int $perPage): array
+    {
         if ($page < 1) {
             throw new InvalidArgumentException("Page must be >= 1");
         }
@@ -248,8 +266,11 @@ class Builder implements SelectBuilderContract {
      *
      * @return array Массив строк
      */
-    public function all(): array {
-        $stmt = Query::run(DB::getToSql()->getSql(), DB::getToSql()->getParams());
+    public function all(): array
+    {
+        $sql = $this->toSql();
+        $params = $this->where->getParams();
+        $stmt = Query::run($sql, $params);
         return $stmt ? $stmt->fetchAll() : [];
     }
 
@@ -258,9 +279,11 @@ class Builder implements SelectBuilderContract {
      *
      * @return array|null Первая строка или null
      */
-    public function first(): ?array {
+    public function first(): ?array
+    {
         $sql = DB::getToSql()->getSql() . " LIMIT 1";
-        $stmt = Query::run($sql, DB::getToSql()->getParams());
+        $params = $this->where->getParams();
+        $stmt = Query::run($sql, $params);
         return $stmt ? $stmt->fetch() : null;
     }
 
@@ -269,7 +292,13 @@ class Builder implements SelectBuilderContract {
      *
      * @return string SQL‑код
      */
-    public function toSql(): string {
+    public function toSql(): string
+    {
         return DB::getToSql()->getSqlStr();
+    }
+
+    public function getToParam(): array
+    {
+        return $this->where->getParams();
     }
 }

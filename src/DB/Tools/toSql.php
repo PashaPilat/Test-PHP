@@ -1,11 +1,13 @@
 <?php
+
 namespace App\DB\Tools;
 
 use App\DB\Contracts\ToSqlContract;
 use InvalidArgumentException;
 use RuntimeException;
 
-class ToSql implements ToSqlContract {
+class ToSql implements ToSqlContract
+{
     /** @var array Части SQL‑запроса (ключ => [sql, params]) */
     private array $parts = [];
 
@@ -26,7 +28,8 @@ class ToSql implements ToSqlContract {
      * @param array  $params Параметры для подготовленного запроса
      * @throws InvalidArgumentException Если ключ или параметры некорректны
      */
-    public function add(string $key, string $sql, array $params = []): void {
+    public function add(string $key, string $sql, array $params = []): void
+    {
         if (!in_array($key, self::ALLOWED_PARTS, true)) {
             throw new InvalidArgumentException("Invalid SQL part key: $key");
         }
@@ -44,7 +47,8 @@ class ToSql implements ToSqlContract {
      *
      * @throws RuntimeException Если отсутствует основная часть (select/insert/update/delete)
      */
-    public function build(): void {
+    public function build(): void
+    {
         $sqlParts = [];
         $sqlPartsWithParams = [];
 
@@ -73,46 +77,55 @@ class ToSql implements ToSqlContract {
      * @param mixed $param Параметр
      * @return string Экранированное значение
      */
-    private function sanitizeParam($param): string {
+    private function sanitizeParam($param): string
+    {
         if ($param === null) return 'NULL';
         if (is_numeric($param)) return (string)$param;
         return "'" . addslashes((string)$param) . "'";
     }
 
-    public function getSql(): string {
+    public function getSql(): string
+    {
         if (empty($this->sql)) $this->build();
         return $this->sql;
     }
 
-    public function getSqlStr(): string {
+    public function getSqlStr(): string
+    {
         if (empty($this->sqlString)) $this->build();
         return $this->sqlString;
     }
 
-    public function getParams(): array {
+    public function getParams(): array
+    {
         return $this->params;
     }
 
-    public function reset(): void {
+    public function reset(): void
+    {
         $this->parts = [];
         $this->params = [];
         $this->sql = '';
         $this->sqlString = '';
     }
 
-    public function has(string $key): bool {
+    public function has(string $key): bool
+    {
         return isset($this->parts[$key]);
     }
 
-    public function remove(string $key): void {
+    public function remove(string $key): void
+    {
         unset($this->parts[$key]);
     }
 
-    public function debug(): array {
+    public function debug(): array
+    {
         return $this->parts;
     }
 
-    public function merge(ToSqlContract $other): void {
+    public function merge(ToSqlContract $other): void
+    {
         $this->parts = array_merge($this->parts, $other->debug());
         $this->params = array_merge($this->params, $other->getParams());
     }
@@ -122,7 +135,8 @@ class ToSql implements ToSqlContract {
      *
      * @throws RuntimeException Если отсутствует основная часть
      */
-    public function validate(): void {
+    public function validate(): void
+    {
         $hasMain = $this->has('select') || $this->has('insert') || $this->has('update') || $this->has('delete');
         if (!$hasMain) {
             throw new RuntimeException("Invalid SQL: missing main clause (select/insert/update/delete)");

@@ -1,0 +1,407 @@
+скрипты
+resources\js\app.js
+import * as bootstrap from 'bootstrap';
+import $ from 'jquery'
+
+window.$ = window.jQuery = $
+window.bootstrap = bootstrap;
+
+import PlatPCore from './core/PlatPCore'
+$(document).ready(function () {
+    const core = new PlatPCore()
+    core.init()
+})
+
+resources\js\core\Api.js
+import $ from 'jquery'
+
+export default class Api {
+
+    request(url, data = {}) {
+        return $.ajax({
+            url: url,
+            method: 'GET',
+            data: data,
+            dataType: 'json'
+        })
+    }
+
+    getProducts(params) {
+        return this.request('/api/products', params)
+    }
+
+    getCategories(params) {
+        return this.request('/api/categories', params)
+    }
+}
+resources\js\core\PlatPCore.js
+import Api from './Api'
+import Catalog from '../modules/Catalog'
+import Sidebar from '../modules/Sidebar'
+import HistoryManager from './HistoryManager'
+import Cart from '../modules/cart'
+
+export default class PlatPCore {
+
+    constructor() {
+        this.api = new Api()
+        this.history = new HistoryManager(this)
+
+        this.catalog = new Catalog(this)
+        this.sidebar = new Sidebar(this)
+        this.cart = new Cart(this)
+    }
+
+    init() {
+        this.catalog.init()
+        this.sidebar.init()
+        this.history.init()
+        this.cart.init()
+    }
+}
+resources\js\core\HistoryManager.js
+/**
+ * Class HistoryManager
+ *
+ * Управляет URL каталога через History API.
+ * Синхронизирует состояние каталога и адресную строку.
+ */
+export default class HistoryManager {
+
+    constructor(core) {
+        this.core = core
+    }
+
+    init() {
+        window.addEventListener('popstate', (event) => {
+            if (!event.state) return
+            this.core.catalog.restoreState(event.state)
+        })
+    }
+
+    /**
+     * Обновляет URL в браузере
+     */
+    push(state) {
+        const url = this.buildUrl(state)
+        window.history.pushState(state, '', url)
+    }
+
+    /**
+     * Строит URL из состояния каталога
+     */
+    buildUrl(state) {
+        let url = '/catalog'
+        if (state.category) {
+            url += '/' + state.category
+        }
+        const params = new URLSearchParams()
+        if (state.page > 1) params.set('page', state.page)
+        if (state.sort !== 'default') params.set('sort', state.sort)
+        const query = params.toString()
+        return query ? `${url}?${query}` : url
+    }
+}
+resources\js\components\notifier.js
+import $ from 'jquery';
+
+export function notify(message, type = 'success') {
+    const $notifier = $('#notifier');
+    $notifier.removeClass('error success').addClass(type).text(message).addClass('show');
+
+    setTimeout(() => {
+        $notifier.removeClass('show');
+    }, 3000); // скрыть через 3 секунды
+}
+теперь
+resources\js\modules\Catalog.js
+import $ from 'jquery'
+import CatalogState from './CatalogState'
+
+/**
+ * Class Catalog
+ *
+ * Управляет каталогом товаров:
+ * - загрузка товаров
+ * - работа с состоянием каталога
+ * - обработка кнопок покупки
+ */
+export default class Catalog {
+
+    constructor(core) {
+        this.core = core
+        this.state = new CatalogState()
+    }
+
+    /**
+     * Инициализация каталога
+     */
+    init() {
+        this.bindPagination()
+        this.bindHeaderCategories()
+        this.bindSort()
+    }
+
+    /**
+     * Загружает товары по категории
+     */
+    loadProducts(categorySlug = null) {
+        if (categorySlug) {
+            this.state.setCategory(categorySlug)
+        }
+        const params = this.state.getParams()
+        this.core.api.getProducts(params).done((response) => {
+            if (!response.success) {
+                alert('Ошибка загрузки товаров')
+                return
+            }
+            $('#product-list').html(response.products_html)
+            $('.catalog-title').text(response.title)
+            this.core.history.push(this.state.state)
+        })
+    }
+    /**
+     * Восстанавливает состояние (назад/вперёд)
+     */
+    restoreState(state) {
+        this.state.setState(state)
+        const params = this.state.getParams()
+        this.core.api.getProducts(params).done((response) => {
+            $('#product-list').html(response.products_html)
+            $('.catalog-title').text(response.title)
+        })
+    }
+
+    /**
+     * Устанавливает состояние каталога полностью.
+     *
+     * Используется при восстановлении истории (History API),
+     * когда пользователь нажимает "назад/вперёд".
+     *
+     * @param {Object} state
+     */
+    setState(state) {
+        this.state.category = state.category ?? null
+        this.state.page = state.page ?? 1
+        this.state.sort = state.sort ?? 'default'
+        this.state.filters = state.filters ?? {}
+    }
+
+    /**
+     * Устанавливает страницу
+     */
+    setPage(page) {
+        this.state.setPage(page)
+        this.loadProducts()
+    }
+
+    /**
+     * Устанавливает сортировку
+     */
+    setSort(sort) {
+        this.state.setSort(sort)
+        this.loadProducts()
+    }
+    
+    bindSort() {
+        const core = this.core
+        $(document).on('change', '#catalog-sort', function () {
+            const sort = $(this).val()
+            core.catalog.setSort(sort)
+        })
+    }
+
+    /**
+     * Добавляет фильтр
+     */
+    setFilter(name, value) {
+        this.state.setFilter(name, value)
+        this.loadProducts()
+    }
+    bindHeaderCategories() {
+        const core = this.core
+        $(document).on('click', '.add_nav a', function (e) {
+            const url = $(this).attr('href')
+            if (!url.startsWith('/catalog')) return
+            e.preventDefault()
+            const slug = url.split('/').pop()
+            core.catalog.loadProducts(slug)
+        })
+    }
+
+    /*
+    * пагинация
+    */
+    bindPagination() {
+        const core = this.core
+        $(document).on('click', '.pagination a', function (e) {
+            e.preventDefault()
+            const page = $(this).data('page')
+            if (!page) return
+            core.catalog.setPage(page)
+        })
+    }
+}
+resources\js\modules\CatalogState.js
+/**
+ * Class CatalogState
+ *
+ * Хранит текущее состояние каталога:
+ * категория, фильтры, страница, сортировка.
+ * Используется Catalog модулем для построения запросов.
+ */
+export default class CatalogState {
+
+    constructor() {
+        this.state = {
+            category: null,
+            page: 1,
+            sort: 'default',
+            filters: {}
+        }
+    }
+
+    /**
+     * Устанавливает категорию
+     */
+    setCategory(category) {
+        this.state.category = category
+        this.state.page = 1
+    }
+
+    /**
+     * Устанавливает страницу
+     */
+    setPage(page) {
+        this.state.page = page
+    }
+
+    /**
+     * Устанавливает сортировку
+     */
+    setSort(sort) {
+        this.state.sort = sort
+    }
+
+    /**
+     * Добавляет фильтр
+     */
+    setFilter(name, value) {
+        this.state.filters[name] = value
+        this.state.page = 1
+    }
+
+    /**
+     * Удаляет фильтр
+     */
+    removeFilter(name) {
+        delete this.state.filters[name]
+    }
+
+    /**
+     * Возвращает объект параметров для API
+     */
+    getParams() {
+        return {
+            category: this.state.category,
+            page: this.state.page,
+            sort: this.state.sort,
+            ...this.state.filters
+        }
+    }
+}
+resources\js\modules\Sidebar.js
+import $ from 'jquery'
+
+export default class Sidebar {
+    constructor(core) {
+        this.core = core
+    }
+    init() {
+        this.bindToggle()
+        this.bindCategoryClick()
+    }
+    bindToggle() {
+        $('.catalog-sidebar').on('click', '.toggle-arrow', function (e) {
+            e.stopPropagation()
+            const $li = $(this).closest('.category-item')
+            $li.toggleClass('open')
+            $li.children('.sub-categories').slideToggle(200)
+        })
+    }
+    bindCategoryClick() {
+        const core = this.core
+        $('.catalog-sidebar').on('click', '.category-name', function () {
+            const slug = $(this).closest('.category-item').data('slug')
+            if (!slug) return
+            core.catalog.loadProducts(slug)
+        })
+    }
+}
+resources\js\modules\Cart.js
+import $ from 'jquery'
+import * as bootstrap from 'bootstrap'
+import { notify } from '../components/notifier'
+
+export default class Cart {
+    constructor(core) {
+        this.core = core
+        this.cart = JSON.parse(localStorage.getItem('cart') || '[]')
+    }
+    init() {
+        this.bindBuy()
+        this.bindRemove()
+        this.bindOpen()
+    }
+    bindBuy() {
+        const self = this
+        $(document).on('click', '.buy-btn', function () {
+            let name = $(this).data('name')
+            let price = $(this).data('price')
+            self.cart.push({ name, price })
+            localStorage.setItem('cart', JSON.stringify(self.cart))
+            self.updateCart()
+            notify(`Товар "${name}" добавлен в корзину`, 'success')
+        })
+    }
+    bindOpen() {
+        const self = this
+        $(document).on('click', '.nav-link-cart', function () {
+            self.updateCart()
+            let modal = new bootstrap.Modal(document.getElementById('cartModal'))
+            modal.show()
+        })
+    }
+    bindRemove() {
+        const self = this
+        $(document).on('click', '.remove-btn', function () {
+            let index = $(this).data('index')
+            self.cart.splice(index, 1)
+            localStorage.setItem('cart', JSON.stringify(self.cart))
+            self.updateCart()
+        })
+    }
+    updateCart() {
+        let $content = $('#cart-content')
+        if (this.cart.length === 0) {
+            $content.html('<p>Ваша корзина пуста</p>')
+            return
+        }
+        let html = '<ul class="list-group">'
+        this.cart.forEach((item, index) => {
+            html += `
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                ${item.name}
+                <span class="badge bg-primary rounded-pill">
+                    $${item.price}
+                </span>
+                <button class="btn btn-sm btn-danger remove-btn" data-index="${index}">
+                    Удалить
+                </button>
+            </li>
+            `
+        })
+        html += '</ul>'
+        $content.html(html)
+    }
+}

@@ -5,7 +5,7 @@ use App\DB\Schema;
 
 class CreateTableCounter extends Migration {
     public function up() {
-// Таблица counters
+        // Таблица counters
         Schema::create('counters', function (Blueprint $table) {
             $table->enum('entity_type', ['category','attribute'], null, 'Тип сущности');
             $table->integer('entity_id', 11, true, false, null, 'ID сущности');

@@ -6,10 +6,8 @@ use PDO;
 interface ConnectContract {
     /**
      * Инициализирует подключение к базе данных.
-     *
-     * @param array $config Конфигурация подключения (dsn, user, pass)
      */
-    public static function init(array $config): void;
+    public static function init(): void;
 
     /**
      * Возвращает активное подключение PDO.

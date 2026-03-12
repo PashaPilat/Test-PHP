@@ -1,4 +1,5 @@
 <?php
+
 namespace App\DB\Delete;
 
 use App\DB;
@@ -14,7 +15,8 @@ use InvalidArgumentException;
  * Класс для построения и выполнения DELETE‑запросов.
  * Поддерживает fluent‑интерфейс, условия WHERE и группы условий.
  */
-class Builder implements DeleteBuilderContract {
+class Builder implements DeleteBuilderContract
+{
     /** @var string|null Имя таблицы */
     private ?string $table = null;
 
@@ -24,7 +26,8 @@ class Builder implements DeleteBuilderContract {
     /**
      * Создаёт билдер для DELETE‑запроса.
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->where = new Where();
         DB::getToSql()?->add('delete', "DELETE");
     }
@@ -36,7 +39,8 @@ class Builder implements DeleteBuilderContract {
      * @return self
      * @throws InvalidArgumentException Если имя таблицы пустое
      */
-    public function from(string $table): self {
+    public function from(string $table): self
+    {
         if (empty($table)) {
             throw new InvalidArgumentException("Table name cannot be empty");
         }
@@ -45,50 +49,58 @@ class Builder implements DeleteBuilderContract {
         return $this;
     }
 
-/** @inheritdoc */
-    public function where(string $col, mixed $val, WhereOperator $operator = WhereOperator::EQ): self {
+    /** @inheritdoc */
+    public function where(string $col, mixed $val, WhereOperator $operator = WhereOperator::EQ): self
+    {
         $this->where->add($col, $val, $operator, Boolean::AND);
         return $this;
     }
 
     /** @inheritdoc */
-    public function whereOr(string $col, mixed $val, WhereOperator $operator = WhereOperator::EQ): self {
+    public function whereOr(string $col, mixed $val, WhereOperator $operator = WhereOperator::EQ): self
+    {
         $this->where->add($col, $val, $operator, Boolean::OR);
         return $this;
     }
 
     /** @inheritdoc */
-    public function whereById(int $id): self {
+    public function whereById(int $id): self
+    {
         $this->where->whereById($id);
         return $this;
     }
 
     /** @inheritdoc */
-    public function whereIsActive(bool $flag): self {
+    public function whereIsActive(bool $flag): self
+    {
         $this->where->whereIsActive($flag);
         return $this;
     }
 
     /** @inheritdoc */
-    public function group(Boolean $boolean = Boolean::AND): self {
+    public function group(Boolean $boolean = Boolean::AND): self
+    {
         $this->where->group($boolean);
         return $this;
     }
 
     /** @inheritdoc */
-    public function groupEnd(): self {
+    public function groupEnd(): self
+    {
         $this->where->groupEnd();
         return $this;
     }
 
     /** @inheritdoc */
-    public function andGroup(): self {
+    public function andGroup(): self
+    {
         $this->where->andGroup();
         return $this;
     }
 
     /** @inheritdoc */
-    public function orGroup(): self {
+    public function orGroup(): self
+    {
         $this->where->orGroup();
         return $this;
     }
@@ -96,14 +108,16 @@ class Builder implements DeleteBuilderContract {
     /**
      * Возвращает SQL‑строку с плейсхолдерами (?).
      */
-    public function toSql(): string {
+    public function toSql(): string
+    {
         return DB::getToSql()->getSql();
     }
 
     /**
      * Возвращает SQL‑строку с подставленными параметрами (для отладки).
      */
-    public function toSqlStr(): string {
+    public function toSqlStr(): string
+    {
         return DB::getToSql()->getSqlStr();
     }
 
@@ -112,8 +126,14 @@ class Builder implements DeleteBuilderContract {
      *
      * @return int|false Количество удалённых строк или false при ошибке
      */
-    public function exec(): int|false {
-        $stmt = Query::run($this->toSql(), DB::getToSql()->getParams());
+    public function exec(): int|false
+    {
+        // Получаем SQL и параметры
+        $sql    = $this->toSql();
+        $params = DB::getToSql()->getParams();
+
+        // Выполняем запрос
+        $stmt = Query::run($sql, $params);
         return $stmt ? $stmt->rowCount() : false;
     }
 }

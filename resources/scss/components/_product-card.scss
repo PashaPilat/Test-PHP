@@ -1,0 +1,32 @@
+.product-card {
+  border: 1px solid #eee;
+  border-radius: 6px;
+  padding: 15px;
+  position: relative;
+  transition: .2s;
+
+  &:hover {
+    box-shadow: 0 10px 20px rgba(0,0,0,.1);
+  }
+
+  img {
+    width: 100%;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+
+  .product-price {
+    font-weight: bold;
+    margin: 5px 0;
+    color: #198754;
+  }
+
+  .buy-btn {
+    width: 100%;
+    margin-top: 10px;
+    transition: .2s;
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+}
