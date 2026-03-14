@@ -157,3 +157,82 @@
         width: 16.66666667%;
     }
 }
+
+.nav-link-cart {
+    margin-left: 20px;
+    position: initial;
+    min-width: 200px;
+}
+
+.basket {
+    display: block;
+    margin-left: 40px;
+    position: relative;
+    text-align: center;
+    border: 2px solid #ffb300;
+    border: 2px solid #f9e442;
+    -webkit-border-radius: 7px;
+    -moz-border-radius: 7px;
+    border-radius: 7px;
+    font-size: 14px;
+    height: 35px;
+
+    #shopping_cart_box {
+        display: flex;
+        align-items: center;
+        padding: 7px 10px;
+        justify-content: space-between;
+        white-space: nowrap;
+
+        div {
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        .popup_cart {
+            cursor: pointer;
+        }
+
+        .summ_basket {
+            font-weight: 400;
+        }
+
+        .empty_backet {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .img_basket {
+            display: inline-block;
+            padding: 0;
+            position: absolute;
+            top: 50%;
+            left: -13px;
+            z-index: 10;
+            margin-top: -11px;
+            background: #fff;
+            color: #000;
+            font-size: 19px;
+        }
+
+        .img_basket svg {
+            fill: #000;
+            font-size: 19px;
+        }
+
+        svg:not(:root) {
+            overflow: hidden;
+        }
+
+        svg {
+            width: 1em;
+            height: 1em;
+            font-size: 20px;
+        }
+    }
+}

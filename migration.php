@@ -1,4 +1,6 @@
 <?php
+define('BASE_PATH', __DIR__); // корень проекта
+require __DIR__ . '/src/Core/Helpers.php';
 require __DIR__ . '/vendor/autoload.php';
 
 use App\DB;

@@ -21,10 +21,11 @@ abstract class BaseController
      *
      * @param string $template Путь к шаблону (например, 'catalog/index')
      * @param array  $data     Данные для передачи в шаблон
+     * @param string $layoutFile Имя файла (например 'layout.php')
      * @return void
      */
-    protected function render(string $template, array $data = []): void
+    protected function render(string $template, array $data = [], string $layoutFile = "Defaultlayout"): void
     {
-        $this->view->render($template, $data);
+        $this->view->render($template, $data, $layoutFile);
     }
 }

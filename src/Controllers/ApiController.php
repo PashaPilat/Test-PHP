@@ -98,7 +98,7 @@ class ApiController
 
         $cart = $params['query']['cart'] ?? [];
         $_SESSION['cart'] = $cart;
-        
+        $data = ['qty' => 0, 'price' => 0];
         $products = [];
         if (!empty($cart)) {
             $productService = new ProductService();
@@ -107,6 +107,8 @@ class ApiController
                 if ($product) {
                     $product->qty = (int)$qty;
                     $products[] = $product;
+                    $data['qty'] += $product->qty;
+                    $data['price'] += $product->price * $product->qty;
                 }
             }
         }
@@ -115,7 +117,8 @@ class ApiController
             'success' => true,
             'cart_html' => View::renderPartial('cart/partials/cart_content', [
                 'products' => $products
-            ])
+            ]),
+            'cart_header_html' => View::renderPartial('partials/header_cart', ['cart' => $data])
         ]);
     }
 }

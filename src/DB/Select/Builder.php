@@ -284,7 +284,12 @@ class Builder implements SelectBuilderContract
         $sql = DB::getToSql()->getSql() . " LIMIT 1";
         $params = $this->where->getParams();
         $stmt = Query::run($sql, $params);
-        return $stmt ? $stmt->fetch() : null;
+        if (!$stmt) {
+            return null;
+        }
+
+        $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $row !== false ? $row : null;
     }
 
     /**

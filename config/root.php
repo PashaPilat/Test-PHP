@@ -4,7 +4,7 @@ return [
     '/'                   => [App\Controllers\CatalogController::class, 'index'], // выводим все категории
     '/catalog'            => [App\Controllers\CatalogController::class, 'index'],
     '/catalog/{slug}'     => [App\Controllers\CatalogController::class, 'show'], //выводим категорию
-    //'/product/{slug}'     => [App\Controllers\ProductController::class, 'show'], // выводим страницу товара
+    '/product/{slug}'     => [App\Controllers\ProductController::class, 'index'], // выводим страницу товара
 
     '/api/products'       => [App\Controllers\ApiController::class, 'getProduct'], //получим от апи страницу товара, передаем параметры в виде джейсон, результат тоже в виде джейсон
     '/api/categories'     => [App\Controllers\ApiController::class, 'getCatalog'], //получим от апи страницу категории, передаем параметры в виде джейсон, результат тоже в виде джейсон

@@ -13,8 +13,11 @@
 
             <!-- Корзина -->
             <span class="nav-link text-dark nav-link-cart" role="button">
-                <i class="bi bi-cart"></i> Корзина
+                <div class="basket" id="divShoppingCard">
+                    <?php include BASE_PATH . '/views/partials/header_cart.php'; ?>
+                </div>
             </span>
+
         </div>
     </nav>
 

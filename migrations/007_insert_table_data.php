@@ -895,6 +895,9 @@ class InsertTableData extends Migration
             ['product_id'=>41,'attribute_id'=>19,'description'=>'Кэш L2','value'=>'32'],
             ['product_id'=>41,'attribute_id'=>20,'description'=>'Кэш L3','value'=>'36'],
             ['product_id'=>41,'attribute_id'=>117,'description'=>'Энергопотребление','value'=>'125'],
+            ['product_id' => 41, 'attribute_id' => 112, 'description' => 'Цвет', 'value' => 'Черный'],
+            ['product_id' => 41, 'attribute_id' => 112, 'description' => 'Цвет', 'value' => 'Белый'],
+            ['product_id' => 41, 'attribute_id' => 112, 'description' => 'Цвет', 'value' => 'Металик'],
             ['product_id'=>41,'attribute_id'=>80,'description'=>'Страна производства','value'=>'США'],
             ['product_id'=>41,'attribute_id'=>4,'description'=>'Вес','value'=>'0.1'],
 

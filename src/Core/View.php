@@ -25,10 +25,10 @@ class View
      *
      * @param string $template Путь к шаблону (например catalog/index)
      * @param array  $data     Данные для шаблона
-     *
+     * @param string $layoutFile Имя файла (например 'layout.php')
      * @return void
      */
-    public function render(string $template, array $data = []): void
+    public function render(string $template, array $data = [], string $layoutFile = "Defaultlayout"): void
     {
         if (!self::exists($template)) {
             throw new \RuntimeException("View not found: {$template}");
@@ -36,7 +36,7 @@ class View
         $data = array_merge($this->shared, $data);
         extract($data, EXTR_SKIP);
         $contentFile = self::$basePath . $template . '.php';
-        include self::$basePath . 'layout.php';
+        include self::$basePath . $layoutFile .'.php';
     }
 
     /**

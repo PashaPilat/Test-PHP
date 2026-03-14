@@ -6,6 +6,12 @@ export default class Cart {
     constructor(core) {
         this.core = core
         this.cart = JSON.parse(localStorage.getItem('cart') || '[]')
+        const modalEl = document.getElementById('cartModal')
+        if (modalEl) {
+            this.modal = new Modal(modalEl)
+        } else {
+            console.log("no modalEl!!!")
+        }
     }
     init() {
         this.bindOpen()
@@ -13,23 +19,26 @@ export default class Cart {
         this.bindQtyChange()
         this.bindRemove()
         this.bindClear()
-       
-
+        this.refreshCart()
     }
+    refreshCart(callback) {
+        this.core.api.updateProductCart({ cart: this.cart }).done((response) => {
+            if (response.success) {
+                $('#cart-content').html(response.cart_html)
+                $('#divShoppingCard').html(response.cart_header_html)
+
+                if (typeof callback === 'function') {
+                    callback(response)
+                }
+            }
+        })
+    }
+
     bindOpen() {
         const self = this
         $(document).on('click', '.nav-link-cart', function () {
-            self.core.api.updateProductCart({ cart: self.cart }).done((response) => {
-                if (response.success) {
-                   $('#cart-content').html(response.cart_html)
-                    const modalEl = document.getElementById('cartModal')
-                    if (modalEl) {
-                        let modal = new Modal(modalEl)
-                        modal.show()
-                    }else{
-                        console.log("no modalEl!!!")
-                    }
-                }
+            self.refreshCart(() => {
+                self.modal.show()
             })
         })
     }
@@ -43,13 +52,10 @@ export default class Cart {
             // инкрементируем qty
             self.cart[id] = (self.cart[id] || 0) + 1
             localStorage.setItem('cart', JSON.stringify(self.cart))
-            console.log(self.cart)
             // обновляем сервер
-            self.core.api.updateProductCart({ cart: self.cart }).done((response) => {
-                if (response.success) {
-                    $('#cart-content').html(response.cart_html)
-                    notify(`Товар "${name}" с ценой ${price} добавлен в корзину`, 'success')
-                }
+            self.refreshCart(() => {
+                notify(`Товар "${name}" с ценой ${price} добавлен в корзину`, 'success')
+                self.modal.show()
             })
         })
     }
@@ -59,22 +65,14 @@ export default class Cart {
             let id = $(this).data('id')
             self.cart[id] = (self.cart[id] || 0) + 1
             localStorage.setItem('cart', JSON.stringify(self.cart))
-            self.core.api.updateProductCart({ cart: self.cart }).done((response) => {
-                if (response.success) {
-                    $('#cart-content').html(response.cart_html)
-                }
-            })
+            self.refreshCart()
         })
         $(document).on('click', '.qty-minus', function () {
             let id = $(this).data('id')
             if (!id || !self.cart[id]) return
             self.cart[id] = Math.max(1, self.cart[id] - 1)
             localStorage.setItem('cart', JSON.stringify(self.cart))
-            self.core.api.updateProductCart({ cart: self.cart }).done((response) => {
-                if (response.success) {
-                    $('#cart-content').html(response.cart_html)
-                }
-            })
+            self.refreshCart()
         })
     }
     bindRemove() {
@@ -85,11 +83,7 @@ export default class Cart {
 
             delete self.cart[id]
             localStorage.setItem('cart', JSON.stringify(self.cart))
-            self.core.api.updateProductCart({ cart: self.cart }).done((response) => {
-                if (response.success) {
-                    $('#cart-content').html(response.cart_html)
-                }
-            })
+            self.refreshCart()
         })
     }
     bindClear() {
@@ -98,11 +92,7 @@ export default class Cart {
             // полностью очищаем объект
             self.cart = {}
             localStorage.setItem('cart', JSON.stringify(self.cart))
-            self.core.api.updateProductCart({ cart: self.cart }).done((response) => {
-                if (response.success) {
-                    $('#cart-content').html(response.cart_html)
-                }
-            })
+            self.refreshCart()
         })
     }
 }
