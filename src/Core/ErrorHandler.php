@@ -15,7 +15,7 @@ class ErrorHandler
     /**
      * @var bool Режим отладки
      */
-    protected static bool $debug;
+    protected static bool $debug = true;
     protected static bool $flushed = false;
 
     /**
@@ -23,8 +23,17 @@ class ErrorHandler
      */
     protected static array $errors = [
         'Exception' => [],
-        'Error'     => []
+        'Error'     => [],
+        'DBError'   => []
     ];
+
+    /**
+     * Проверка: запущен ли скрипт из CLI.
+     */
+    protected static function isCli(): bool
+    {
+        return php_sapi_name() === 'cli';
+    }
 
     /**
      * Инициализация обработчика ошибок.
@@ -54,10 +63,51 @@ class ErrorHandler
             'trace'   => $e->getTraceAsString()
         ];
 
-        http_response_code(500);
-        self::$debug ? self::renderDebug($e) : self::renderProduction();
+        if (self::isCli()) {
+            // В консоли выводим просто текст
+            echo "❌ Ошибка: {$e->getMessage()}\n";
+            echo $e->getTraceAsString() . "\n";
+        } else {
+            // В вебе — HTML‑страница
+            http_response_code(500);
+            self::$debug ? self::renderDebug($e) : self::renderProduction();
+        }
         exit;
     }
+
+    /**
+     * Обработка ошибок SQL‑запросов.
+     *
+     * @param \Throwable $e
+     * @param string $sql
+     * @param array $params
+     * @param array $builderStack
+     * @return void
+     */
+    public static function handleExceptionDB(\Throwable $e, string $sql, array $params = [], array $builderStack = []): void
+    {
+        self::$errors['DBError'][] = [
+            'class'   => get_class($e),
+            'message' => $e->getMessage(),
+            'file'    => $e->getFile(),
+            'line'    => $e->getLine(),
+            'sql'     => $sql,
+            'params'  => $params,
+            'builder' => $builderStack,
+            'trace'   => $e->getTraceAsString()
+        ];
+
+        if (self::isCli()) {
+            echo "❌ SQL Ошибка: {$e->getMessage()}\n";
+            echo "Запрос: $sql\n";
+            echo "Параметры: " . json_encode($params) . "\n";
+        } else {
+            http_response_code(500);
+            self::$debug ? self::renderDebugDB($e, $sql, $params, $builderStack) : self::renderProduction();
+        }
+        exit;
+    }
+
 
     /**
      * Обработка ошибок PHP (Notice, Warning).
@@ -126,6 +176,29 @@ class ErrorHandler
 
         $viewFile = BASE_PATH . '/views/error/error.php';
 
+        include $viewFile;
+    }
+
+    /**
+     * Красивый вывод ошибки в debug режиме для ошибок билдера.
+     *
+     * @param \Throwable $e Исключение
+     * @param string $sql  sql запрос
+     * @param array  $params Доп параметры
+     * @param array  $builderStack стек билдера
+     * @return void
+     */
+    protected static function renderDebugDB(\Throwable $e, string $sql, array $params, array $builderStack): void
+    {
+        $message = $e->getMessage();
+        $file    = $e->getFile();
+        $line    = $e->getLine();
+
+        $trace   = $e->getTraceAsString();
+        $traceArray = $e->getTrace();
+        $snippet = self::getCodeSnippet($file, $line);
+
+        $viewFile = BASE_PATH . '/views/error/error.php';
         include $viewFile;
     }
 

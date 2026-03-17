@@ -1,6 +1,8 @@
 import * as bootstrap from 'bootstrap';
 import 'bootstrap/dist/js/bootstrap.bundle.js'
 import { Modal } from 'bootstrap'
+import noUiSlider from 'nouislider'
+import 'nouislider/dist/nouislider.css'
 
 import $ from 'jquery'
 

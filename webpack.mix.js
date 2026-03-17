@@ -11,20 +11,28 @@ mix.webpackConfig({
     }),
   ],
 });
-// Основной бандл: JS + SCSS
+
 mix.js('resources/js/app.js', 'assets/js')
   .sass('resources/scss/app.scss', 'assets/css')
   .options({ processCssUrls: false })
   .version();
 
-// Копирование картинок
+mix.js('resources/js/error.js', 'assets/js')
+  .sass('resources/scss/error.scss', 'assets/css')
+  .options({ processCssUrls: false })
+  .version();
+
 mix.copyDirectory('resources/images', 'public/assets/images');
 
-// Копирование шрифтов (если нужно)
-//mix.copyDirectory('resources/css/font_Gotham_Pro', 'public/assets/css/font_Gotham_Pro');
+/* ВОТ ЭТО НУЖНО ДОБАВИТЬ */
+
+mix.copyDirectory(
+  'node_modules/@fortawesome/fontawesome-free/webfonts',
+  'public/assets/webfonts'
+);
 
 mix.browserSync({
-  proxy: 'php-test.loc', // твой локальный домен
+  proxy: 'php-test.loc',
   files: [
     'public/assets/js/*.js',
     'public/assets/css/*.css',
@@ -33,4 +41,3 @@ mix.browserSync({
   injectChanges: true,
   reload: true
 });
-

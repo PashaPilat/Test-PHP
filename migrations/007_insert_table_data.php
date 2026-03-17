@@ -361,6 +361,23 @@ class InsertTableData extends Migration
             ['product_id'=>45,'category_id'=>24],
             ['product_id'=>46,'category_id'=>24],
             ['product_id'=>47,'category_id'=>24],
+            ['product_id' => 41, 'category_id' => 19],
+            ['product_id' => 42, 'category_id' => 19],
+            ['product_id' => 43, 'category_id' => 19],
+            ['product_id' => 44, 'category_id' => 19],
+            ['product_id' => 45, 'category_id' => 19],
+            ['product_id' => 46, 'category_id' => 19],
+            ['product_id' => 47, 'category_id' => 19],
+
+            ['product_id' => 41, 'category_id' => 3],
+            ['product_id' => 42, 'category_id' => 3],
+            ['product_id' => 43, 'category_id' => 3],
+            ['product_id' => 44, 'category_id' => 3],
+            ['product_id' => 45, 'category_id' => 3],
+            ['product_id' => 46, 'category_id' => 3],
+            ['product_id' => 47, 'category_id' => 3],
+
+
             ['product_id'=>48,'category_id'=>24],
             ['product_id'=>49,'category_id'=>24],
             ['product_id'=>50,'category_id'=>24]
@@ -1032,6 +1049,6 @@ class InsertTableData extends Migration
 
     public function down()
     {
-        DB::query("DELETE FROM categories WHERE id > 1");
+        //DB::query("DELETE FROM categories WHERE id > 1");
     }
 }

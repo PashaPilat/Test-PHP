@@ -17,6 +17,7 @@ use App\DB\Tools\Enum\WhereOperator;
  * - сортировку
  * - пагинацию
  * - подготовку данных для вывода
+ * - формирование фильтров для категории
  */
 class ProductService
 {
@@ -27,6 +28,10 @@ class ProductService
      */
     private int $perPage = 12;
 
+    // ------------------------------------------------------------
+    // Методы получения товаров
+    // ------------------------------------------------------------
+
     /**
      * Получает товар по ID.
      *
@@ -35,13 +40,20 @@ class ProductService
      */
     public function getById(int $id): ?Product
     {
-        if ($id <= 0) {  return null; }
+        if ($id <= 0) {
+            return null;
+        }
+
         $row = DB::select('*')
             ->from(['products', 'p'])
             ->where('p.id', $id, WhereOperator::EQ)
             ->where('p.status', 'active', WhereOperator::EQ)
             ->first();
-        if (!$row) { return null; }
+
+        if (!$row) {
+            return null;
+        }
+
         $product = new Product();
         $product->fill($row);
 
@@ -59,17 +71,20 @@ class ProductService
         if ($slug <= 0) {
             return null;
         }
+
         $row = DB::select('*')
             ->from(['products', 'p'])
             ->where('p.slug', $slug, WhereOperator::EQ)
             ->where('p.status', 'active', WhereOperator::EQ)
             ->first();
-            //var_dump($row->toSql(), $row->getToParam(),$row->all());die;
+
         if (!$row) {
             return null;
         }
+
         $product = new Product();
         $product->fill($row);
+
         // атрибуты товара
         $attrRows = DB::select([
             'pa.id',
@@ -114,7 +129,6 @@ class ProductService
         $product->attributes = $attributes;
         $product->colors = $colors;
 
-
         return $product;
     }
 
@@ -122,15 +136,15 @@ class ProductService
      * Получает список товаров каталога.
      *
      * @param string|null $categorySlug Слаг категории
-     * @param string|null      $sort         Тип сортировки
-     * @param int         $page         Номер страницы
+     * @param string|null $sort Тип сортировки
+     * @param int|null $page Номер страницы
      *
      * @return array
      */
     public function getProducts(?string $categorySlug, ?string $sort = null, ?int $page = null): array
     {
-        $query = DB::select([
-            // поля продукта
+        // базовые поля продукта
+        $fields = [
             'p.id',
             'p.name',
             'p.slug',
@@ -146,15 +160,22 @@ class ProductService
             'p.rating',
             'p.rating_count',
             'p.created_at',
-            'p.updated_at',
-            // поля категории с алиасами
-            'c.id AS category_id',
-            'c.name AS category_name',
-            'c.slug AS category_slug',
-            'c.path AS category_path',
-            'c.parent_id AS category_parent_id',
-            'c.description AS category_description'
-        ])
+            'p.updated_at'
+        ];
+
+        // если указана категория — добавляем поля категории
+        if ($categorySlug) {
+            $fields = array_merge($fields, [
+                'c.id AS category_id',
+                'c.name AS category_name',
+                'c.slug AS category_slug',
+                'c.path AS category_path',
+                'c.parent_id AS category_parent_id',
+                'c.description AS category_description'
+            ]);
+        }
+
+        $query = DB::select($fields)
             ->from(['products', 'p'])
             ->where('p.status', 'active', WhereOperator::EQ);
 
@@ -164,12 +185,12 @@ class ProductService
             $query->where('c.slug', $categorySlug, WhereOperator::EQ);
         }
 
-        // сортировка только если указана
+        // сортировка
         if ($sort !== null) {
             $this->applySorting($query, $sort);
         }
 
-        // пагинация только если указана
+        // пагинация
         if ($page !== null) {
             $offset = ($page - 1) * $this->perPage;
             $query->limit($this->perPage)->offset($offset);
@@ -186,6 +207,95 @@ class ProductService
         ];
     }
 
+    // ------------------------------------------------------------
+    // Фильтры
+    // ------------------------------------------------------------
+
+    /**
+     * Формирует фильтры для категории.
+     *
+     * Использует таблицу counters и представления:
+     * - categories_with_count (для min/max цены)
+     * - attributes_with_count (для списка атрибутов и их значений)
+     *
+     * @param string $categorySlug Слаг категории
+     * @return array Структура фильтра
+     */
+    public function getFiltersForCategory(string $categorySlug): array
+    {
+        // Получаем данные по категории (min/max цены)
+        $categoryRow = DB::select(['c.id', 'c.min_price', 'c.max_price'])
+            ->from(['categories_with_count', 'c'])
+            ->where('c.slug', $categorySlug, WhereOperator::EQ)
+            ->first();
+
+        $filters = [
+            'price' => [
+                'min' => $categoryRow['min_price'] ?? 0,
+                'max' => $categoryRow['max_price'] ?? 0,
+            ],
+            'attributes' => []
+        ];
+
+        // Получаем список атрибутов с products_count > 0
+        $attrRows = DB::select(['a.id', 'a.name', 'a.slug', 'a.description', 'a.type', 'a.values_json'])
+            ->from(['attributes_with_count', 'a'])
+            ->where('a.products_count', 0, WhereOperator::GT)
+            ->where('a.category_id', $categoryRow['id'], WhereOperator::EQ)
+            ->where('a.status', 'active', WhereOperator::EQ)
+            ->orderBy('a.name', OrderDirection::ASC) // сортировка атрибутов по имени
+            ->all();
+
+        foreach ($attrRows as $attr) {
+            $values = [];
+            if (!empty($attr['values_json'])) {
+                $decoded = json_decode($attr['values_json'], true);
+                $valueIds = isset($decoded[0]) && is_array($decoded[0])
+                    ? array_keys($decoded[0])
+                    : array_keys($decoded);
+
+                if (!empty($valueIds)) {
+                    $rows = DB::select(['id', 'attribute_id', 'value', 'description'])
+                        ->from('product_attributes')
+                        ->where('id', $valueIds, WhereOperator::IN)
+                        ->where('status', 'active', WhereOperator::EQ)
+                        ->orderBy('value', OrderDirection::ASC)
+                        ->all();
+
+                    // группируем по value
+                    $grouped = [];
+                    foreach ($rows as $row) {
+                        $val = $row['value'];
+                        if (!isset($grouped[$val])) {
+                            $grouped[$val] = [
+                                'title' => $val,
+                                'description' => $row['description'],
+                                'value' => []
+                            ];
+                        }
+                        $grouped[$val]['value'][] = $row['id'];
+                    }
+                    $values = array_values($grouped);
+                }
+            }
+
+            $filters['attributes'][] = [
+                'id' => $attr['id'],
+                'name' => $attr['name'],
+                'slug' => $attr['slug'],
+                'description' => $attr['description'],
+                'type' => $attr['type'],
+                'values' => $values
+            ];
+        }
+
+        return $filters;
+    }
+
+
+    // ------------------------------------------------------------
+    // Вспомогательные методы
+    // ------------------------------------------------------------
 
     /**
      * Применяет сортировку к запросу.
@@ -225,7 +335,6 @@ class ProductService
      * Преобразует строки БД в объекты Product.
      *
      * @param array $rows
-     *
      * @return Product[]
      */
     private function mapRowsToProducts(array $rows): array

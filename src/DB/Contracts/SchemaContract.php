@@ -14,8 +14,9 @@ interface SchemaContract {
 
     /**
      * Удаляет таблицу, если она существует.
+     * @return bool
      */
-    public static function dropIfExists(string $table): void;
+    public static function dropIfExists(string $table): bool;
 
     /**
      * Создаёт триггер.

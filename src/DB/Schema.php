@@ -138,13 +138,63 @@ class Schema implements SchemaContract {
 
     /**
      * Удаляет таблицу, если она существует.
+     * Перед удалением снимает все внешние ключи.
+     * Возвращает true, если таблица удалена, false — если не удалось.
      *
      * @param string $table Имя таблицы
+     * @return bool
      */
-    public static function dropIfExists(string $table): void {
-        DB::query("DROP TABLE IF EXISTS `$table`");
-        echo "🗑️ Таблица $table удалена\n";
+    public static function dropIfExists(string $table): bool
+    {
+        try {
+            // Проверяем наличие таблицы
+            $exists = DB::query("SHOW TABLES LIKE ?", [$table])->fetchAll(\PDO::FETCH_ASSOC);
+            if (empty($exists)) {
+                echo "ℹ️ Таблица $table не найдена, пропускаем удаление\n";
+                return true;
+            }
+
+            // Снимаем все внешние ключи внутри таблицы
+            $fkList = DB::query("
+            SELECT CONSTRAINT_NAME 
+            FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE 
+            WHERE TABLE_NAME = ? 
+              AND CONSTRAINT_SCHEMA = DATABASE() 
+              AND REFERENCED_TABLE_NAME IS NOT NULL
+        ", [$table])->fetchAll(\PDO::FETCH_ASSOC);
+
+            foreach ($fkList as $fk) {
+                $fkName = $fk['CONSTRAINT_NAME'];
+                DB::query("ALTER TABLE `$table` DROP FOREIGN KEY `$fkName`");
+                echo "➖ Удалён внешний ключ $fkName из $table\n";
+            }
+
+            // Снимаем внешние ключи в других таблицах, которые ссылаются на эту
+            $refList = DB::query("
+            SELECT TABLE_NAME, CONSTRAINT_NAME 
+            FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE 
+            WHERE REFERENCED_TABLE_NAME = ? 
+              AND CONSTRAINT_SCHEMA = DATABASE()
+        ", [$table])->fetchAll(\PDO::FETCH_ASSOC);
+
+            foreach ($refList as $ref) {
+                $refTable = $ref['TABLE_NAME'];
+                $fkName   = $ref['CONSTRAINT_NAME'];
+                DB::query("ALTER TABLE `$refTable` DROP FOREIGN KEY `$fkName`");
+                echo "➖ Удалён внешний ключ $fkName из $refTable (ссылается на $table)\n";
+            }
+
+            // Удаляем таблицу
+            DB::query("DROP TABLE IF EXISTS `$table`");
+            echo "🗑️ Таблица $table удалена\n";
+            return true;
+        } catch (Throwable $e) {
+            echo "❌ Ошибка при удалении таблицы $table: " . $e->getMessage() . "\n";
+            return false;
+        }
     }
+
+
 
     /**
      * Создаёт триггер для таблицы.
@@ -167,9 +217,26 @@ class Schema implements SchemaContract {
      *
      * @param string $name Имя триггера
      */
-    public static function dropTrigger(string $name): void {
-        DB::query("DROP TRIGGER IF EXISTS `$name`");
-        echo "🗑️ Триггер $name удалён\n";
+    public static function dropTrigger(string $name): void
+    {
+        try {
+            $exists = DB::query("
+            SELECT TRIGGER_NAME 
+            FROM INFORMATION_SCHEMA.TRIGGERS 
+            WHERE TRIGGER_SCHEMA = DATABASE() 
+              AND TRIGGER_NAME = ?
+        ", [$name])->fetchAll(\PDO::FETCH_ASSOC);
+
+            if (empty($exists)) {
+                echo "ℹ️ Триггер $name не найден, пропускаем удаление\n";
+                return;
+            }
+
+            DB::query("DROP TRIGGER IF EXISTS `$name`");
+            echo "🗑️ Триггер $name удалён\n";
+        } catch (Throwable $e) {
+            echo "❌ Ошибка при удалении триггера $name: " . $e->getMessage() . "\n";
+        }
     }
 
     /**
@@ -207,8 +274,25 @@ class Schema implements SchemaContract {
      *
      * @param string $name Имя представления
      */
-    public static function dropView(string $name): void {
-        DB::query("DROP VIEW IF EXISTS `$name`");
-        echo "🗑️ Представление $name удалено\n";
+    public static function dropView(string $name): void
+    {
+        try {
+            $exists = DB::query("
+            SELECT TABLE_NAME 
+            FROM INFORMATION_SCHEMA.VIEWS 
+            WHERE TABLE_SCHEMA = DATABASE() 
+              AND TABLE_NAME = ?
+        ", [$name])->fetchAll(\PDO::FETCH_ASSOC);
+
+            if (empty($exists)) {
+                echo "ℹ️ Представление $name не найдено, пропускаем удаление\n";
+                return;
+            }
+
+            DB::query("DROP VIEW IF EXISTS `$name`");
+            echo "🗑️ Представление $name удалено\n";
+        } catch (Throwable $e) {
+            echo "❌ Ошибка при удалении представления $name: " . $e->getMessage() . "\n";
+        }
     }
 }

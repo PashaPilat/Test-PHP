@@ -48,13 +48,29 @@ class Where implements WhereContract
             throw new InvalidArgumentException("Column name cannot be empty");
         }
 
-        if ($operator === WhereOperator::IS_NULL || $operator === WhereOperator::IS_NOT_NULL) {
-            $condition = "{$col} {$operator->value}";
-        } else {
-            $condition = "{$col} {$operator->value} ?";
-            $this->params[] = $val;
-        }
+        // формируем условие в зависимости от оператора
+        $condition = match ($operator) {
+            WhereOperator::IS_NULL, WhereOperator::IS_NOT_NULL
+            => "{$col} {$operator->value}",
 
+            WhereOperator::IN, WhereOperator::NOT_IN => (function () use ($col, $val, $operator) {
+                if (!is_array($val) || empty($val)) {
+                    throw new InvalidArgumentException("Value for {$operator->value} must be a non-empty array");
+                }
+                $placeholders = implode(',', array_fill(0, count($val), '?'));
+                foreach ($val as $v) {
+                    $this->params[] = $v;
+                }
+                return "{$col} {$operator->value} ({$placeholders})";
+            })(),
+
+            default => (function () use ($col, $val, $operator) {
+                $this->params[] = $val;
+                return "{$col} {$operator->value} ?";
+            })(),
+        };
+
+        // добавляем условие в текущую группу или общий список
         if (!empty($this->groupStack)) {
             $group = &$this->groupStack[count($this->groupStack) - 1];
             if (!empty($group['conditions'])) {

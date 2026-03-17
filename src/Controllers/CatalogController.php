@@ -66,13 +66,15 @@ class CatalogController extends BaseController
         $topMenu = $menuService->getTopMenuWithChildren();
 
         $categories = $categoryService->getTree();
-        
+        $filters = $productService->getFiltersForCategory($slug);
+
         $this->render('catalog/index', [
             'categories' => $categories,
             'products' => $data['products'],
             'topMenu' => $topMenu,
             'title' => $category->name,
             'currentCategory' => $category,
+            'filters' => $filters
         ]);
     }
 }

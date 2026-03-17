@@ -71,13 +71,14 @@ class ApiController
         $productService = new ProductService();
         $data = $productService->getProducts($slug, $params['query']['sort'] ?? null, $params['query']['page'] ?? null);        
         $categories = $categoryService->getTree();
-
+        $filters = $productService->getFiltersForCategory($slug);
         Response::json([
             'success' => true,
             'currentCategory' => $category,
             'sidebar_html' => View::renderPartial('partials/sidebar', [
                 'categories' => $categories,
-                'currentCategory' => $category
+                'currentCategory' => $category,
+                'filters' => $filters
             ]),
             'products_html' => View::renderPartial('catalog/partials/products', [
                 'products' => $data['products']

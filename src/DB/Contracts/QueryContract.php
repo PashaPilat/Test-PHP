@@ -2,16 +2,25 @@
 namespace App\DB\Contracts;
 
 use PDOStatement;
+use RuntimeException;
 
 interface QueryContract {
     /**
-     * Выполняет SQL‑запрос с параметрами.
+     * Выполняет SQL‑запрос с параметрами и дополнительным контекстом.
      *
-     * @param string $sql    SQL‑строка
-     * @param array  $params Параметры для подготовленного запроса
-     * @return PDOStatement Результат выполнения запроса
+     * Используется для отладки и диагностики: при ошибке запроса
+     * вызывается специализированный обработчик, которому передаются
+     * SQL‑строка, параметры и сборочный стек билдера.
+     *
+     * @param string $sql          SQL‑строка
+     * @param array  $params       Параметры для подготовленного запроса
+     * @param array  $builderStack Сборочный стек билдера (для отладки)
+     *
+     * @return PDOStatement        Результат выполнения запроса
+     *
+     * @throws RuntimeException    Если выполнение запроса завершилось ошибкой
      */
-    public static function run(string $sql, array $params = []): PDOStatement;
+    public static function run(string $sql, array $params = [], array $builderStack = []): PDOStatement;
 
     /**
      * Выполняет запрос и возвращает все строки.

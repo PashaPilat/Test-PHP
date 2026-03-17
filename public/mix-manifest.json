@@ -1,10 +1,16 @@
 {
-    "/assets/js/app.js": "/assets/js/app.js?id=20da26b0c6ebaa880cf55ebd9e8f4cda",
-    "/assets/css/app.css": "/assets/css/app.css?id=a39284c455fef4c2782bf2aecd3f3971",
+    "/assets/js/app.js": "/assets/js/app.js?id=6e7573958667ef913dbcd53c9a500f3b",
+    "/assets/js/error.js": "/assets/js/error.js?id=b3f7f3b13e1462bf8c5e9273ed8f2b38",
+    "/assets/css/error.css": "/assets/css/error.css?id=42c3399558a58690c5eec971bcf58205",
+    "/assets/css/app.css": "/assets/css/app.css?id=23ead73adff3cb5638f6a8efa5b4c5dc",
     "/assets/images/logo 2.png": "/assets/images/logo 2.png?id=99e61f3025e9d9f98932313261943b85",
     "/assets/images/logo full.png": "/assets/images/logo full.png?id=655bea031ea71a9d592372e0e0a1103c",
     "/assets/images/no_category.png": "/assets/images/no_category.png?id=700c4217a37e2d38f1244f566931e5bc",
     "/assets/images/no_image.png": "/assets/images/no_image.png?id=c811e24ba28aeaf5697d34d35c575b85",
     "/assets/images/no_product.png": "/assets/images/no_product.png?id=b7199fb20210a6f94d064b27b6f95ef1",
-    "/assets/images/user.png": "/assets/images/user.png?id=4a1a650b22a2c19bee8b5492a97eb8a2"
+    "/assets/images/user.png": "/assets/images/user.png?id=4a1a650b22a2c19bee8b5492a97eb8a2",
+    "/assets/webfonts/fa-brands-400.woff2": "/assets/webfonts/fa-brands-400.woff2?id=5f9a254cf8fc05f4e4ad1610a286137d",
+    "/assets/webfonts/fa-regular-400.woff2": "/assets/webfonts/fa-regular-400.woff2?id=a9109b5a7e2d4483e3ec441255931fe2",
+    "/assets/webfonts/fa-solid-900.woff2": "/assets/webfonts/fa-solid-900.woff2?id=a65e9baefb9a38e5e5541a1ee566a0f0",
+    "/assets/webfonts/fa-v4compatibility.woff2": "/assets/webfonts/fa-v4compatibility.woff2?id=43aa5afe8e59421835703bb7cf9d1224"
 }

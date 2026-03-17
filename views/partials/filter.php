@@ -1,34 +1,62 @@
-<div class="filter-box mt-4">
-    <h5 class="filter-heading toggle-filter d-flex justify-content-between align-items-center">Цена <span class="filter-arrow">▸</span></h5>
-    <div class="filter-content">
-        <div class="d-flex align-items-center">
-            <input type="number" class="form-control me-2" placeholder="от">
-            <input type="number" class="form-control me-2" placeholder="до">
-            <span>$</span>
-        </div>
-    </div>
+<div id="filters_box" class="box filter_box">
+    <div class="filter_box_in">
+        <!-- Сброс -->
+        <a rel="nofollow" class="filter_heading filter_reset_link" href="<?= htmlspecialchars($_SERVER['REQUEST_URI']) ?>">
+            Сбросить фильтры
+        </a>
 
-    <h5 class="filter-heading toggle-filter d-flex justify-content-between align-items-center mt-3">Бренд <span class="filter-arrow">▸</span></h5>
-    <div class="filter-content">
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="brand1">
-            <label class="form-check-label" for="brand1">Apple</label>
+        <!-- Цена -->
+        <div class="dipcen mt-3">
+            <div><span class="filter_heading">Цена</span></div>
+            <div id="slider-range"></div>
+            <span class="left slider-from">
+                <input type="number" min="0" class="input-type-number-custom" name="rmin" id="range1"
+                    value="<?= htmlspecialchars($filters['price']['min']) ?>">
+            </span>
+            <span class="left slider-to">
+                <input type="number" min="0" class="input-type-number-custom" name="rmax" id="range2"
+                    value="<?= htmlspecialchars($filters['price']['max']) ?>">
+            </span>
+            &nbsp;&nbsp;<span class="price_fltr">$</span>
         </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="brand2">
-            <label class="form-check-label" for="brand2">Samsung</label>
-        </div>
-    </div>
 
-    <h5 class="filter-heading toggle-filter d-flex justify-content-between align-items-center mt-3">ОЗУ <span class="filter-arrow">▸</span></h5>
-    <div class="filter-content">
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="ram1">
-            <label class="form-check-label" for="ram1">2 ГБ</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="ram2">
-            <label class="form-check-label" for="ram2">4 ГБ</label>
+        <div class="clear"></div>
+
+        <!-- Атрибуты -->
+        <div class="attrib_divs attrib_divs_mobil ajax" id="attribs">
+            <?php foreach ($filters['attributes'] as $attribute): ?>
+                <div class="block">
+                    <div class="filter_heading toggle-filter d-flex justify-content-between align-items-center">
+                        <?= htmlspecialchars($attribute['name']) ?>
+                        <span class="filter-arrow">▸</span>
+                    </div>
+                    <div class="inner-scroll filter-content">
+                        <!-- чекбокс "все" -->
+                        <div class="item">
+                            <input class="filter_all" type="checkbox"
+                                id="filter_all_<?= $attribute['id'] ?>"
+                                name="<?= $attribute['id'] ?>" value="not" checked>
+                            <label for="filter_all_<?= $attribute['id'] ?>">все</label>
+                        </div>
+
+                        <!-- значения -->
+                        <?php foreach ($attribute['values'] as $val): ?>
+                            <div class="item">
+                                <input type="checkbox"
+                                    id="attr<?= $attribute['id'] ?>_<?= $val['title'] ?>"
+                                    name="<?= $attribute['id'] ?>"
+                                    value="<?= implode(',', $val['value']) ?>">
+                                <label for="attr<?= $attribute['id'] ?>_<?= $val['title'] ?>">
+                                    <?= htmlspecialchars($val['title']) ?>
+                                    <?php if (!empty($val['qty'])): ?>
+                                        <span class="qty"><?= $val['qty'] ?></span>
+                                    <?php endif; ?>
+                                </label>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            <?php endforeach; ?>
         </div>
     </div>
 </div>

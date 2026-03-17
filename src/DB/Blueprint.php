@@ -180,7 +180,7 @@ class Blueprint implements BlueprintContract
         int $scale = self::DEFAULT_DECIMAL_SCALE,
         bool $unsigned = false,
         ?string $default = null,
-        string $comment = ''
+        ?string $comment = ''
     ): void {
         $uns = $unsigned ? "UNSIGNED " : "";
         $def = $default !== null ? "DEFAULT $default " : "";

@@ -1,0 +1,569 @@
+==============================
+[10:23:49.123] Ошибки за текущий запрос
+URI: /
+METHOD: GET
+IP: 192.168.160.1
+------------------------------
+--- Error ---
+[Error 8192] Creation of dynamic property App\Models\Category::$children is deprecated in /var/www/html/src/Services/MenuService.php:112
+--- Error ---
+[Error 8192] Creation of dynamic property App\Models\Category::$children is deprecated in /var/www/html/src/Services/MenuService.php:112
+--- Error ---
+[Error 8192] Creation of dynamic property App\Models\Category::$children is deprecated in /var/www/html/src/Services/MenuService.php:112
+--- Error ---
+[Error 8192] Creation of dynamic property App\Models\Category::$children is deprecated in /var/www/html/src/Services/MenuService.php:112
+--- Error ---
+[Error 8192] Creation of dynamic property App\Models\Category::$children is deprecated in /var/www/html/src/Services/MenuService.php:112
+--- Error ---
+[Error 8192] Creation of dynamic property App\Models\Category::$children is deprecated in /var/www/html/src/Services/MenuService.php:112
+--- Error ---
+[Error 2] Undefined array key "title" in /var/www/html/src/Controllers/CatalogController.php:36
+--- Error ---
+[Error 2] Undefined variable $cart in /var/www/html/views/partials/header_cart.php:3
+--- Error ---
+[Error 2] Trying to access array offset on value of type null in /var/www/html/views/partials/header_cart.php:3
+--- Error ---
+[Error 2] Undefined variable $cart in /var/www/html/views/partials/header_cart.php:4
+--- Error ---
+[Error 2] Trying to access array offset on value of type null in /var/www/html/views/partials/header_cart.php:4
+--- Error ---
+[Error 8192] htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /var/www/html/views/catalog/index.php:5
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$attributes in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] foreach() argument must be of type array|object, null given in /var/www/html/views/catalog/partials/products.php:13
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:31
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:41
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+--- Error ---
+[Error 2] Undefined property: App\Models\Product::$qty in /var/www/html/views/cart/partials/cart_content.php:59
+==============================
+==============================
+[10:25:46.243] Ошибки за текущий запрос
+URI: /catalog/fridges
+METHOD: GET
+IP: 192.168.160.1
+------------------------------
+--- Error ---
+[Error 8192] Creation of dynamic property App\Models\Category::$children is deprecated in /var/www/html/src/Services/MenuService.php:112
+--- Error ---
+[Error 8192] Creation of dynamic property App\Models\Category::$children is deprecated in /var/www/html/src/Services/MenuService.php:112
+--- Error ---
+[Error 8192] Creation of dynamic property App\Models\Category::$children is deprecated in /var/www/html/src/Services/MenuService.php:112
+--- Error ---
+[Error 8192] Creation of dynamic property App\Models\Category::$children is deprecated in /var/www/html/src/Services/MenuService.php:112
+--- Error ---
+[Error 8192] Creation of dynamic property App\Models\Category::$children is deprecated in /var/www/html/src/Services/MenuService.php:112
+--- Error ---
+[Error 8192] Creation of dynamic property App\Models\Category::$children is deprecated in /var/www/html/src/Services/MenuService.php:112
+==============================
+==============================
+[10:28:00.443] Ошибки за текущий запрос
+URI: /catalog/fridges
+METHOD: GET
+IP: 192.168.160.1
+------------------------------
+--- Error ---
+[Error 8192] Creation of dynamic property App\Models\Category::$children is deprecated in /var/www/html/src/Services/MenuService.php:112
+--- Error ---
+[Error 8192] Creation of dynamic property App\Models\Category::$children is deprecated in /var/www/html/src/Services/MenuService.php:112
+--- Error ---
+[Error 8192] Creation of dynamic property App\Models\Category::$children is deprecated in /var/www/html/src/Services/MenuService.php:112
+--- Error ---
+[Error 8192] Creation of dynamic property App\Models\Category::$children is deprecated in /var/www/html/src/Services/MenuService.php:112
+--- Error ---
+[Error 8192] Creation of dynamic property App\Models\Category::$children is deprecated in /var/www/html/src/Services/MenuService.php:112
+--- Error ---
+[Error 8192] Creation of dynamic property App\Models\Category::$children is deprecated in /var/www/html/src/Services/MenuService.php:112
+==============================

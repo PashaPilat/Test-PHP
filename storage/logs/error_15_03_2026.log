@@ -1,0 +1,19 @@
+==============================
+[20:16:37.162] Ошибки за текущий запрос
+URI: /catalog/fridges
+METHOD: GET
+IP: 192.168.160.1
+------------------------------
+--- Error ---
+[Error 8192] Creation of dynamic property App\Models\Category::$children is deprecated in /var/www/html/src/Services/MenuService.php:112
+--- Error ---
+[Error 8192] Creation of dynamic property App\Models\Category::$children is deprecated in /var/www/html/src/Services/MenuService.php:112
+--- Error ---
+[Error 8192] Creation of dynamic property App\Models\Category::$children is deprecated in /var/www/html/src/Services/MenuService.php:112
+--- Error ---
+[Error 8192] Creation of dynamic property App\Models\Category::$children is deprecated in /var/www/html/src/Services/MenuService.php:112
+--- Error ---
+[Error 8192] Creation of dynamic property App\Models\Category::$children is deprecated in /var/www/html/src/Services/MenuService.php:112
+--- Error ---
+[Error 8192] Creation of dynamic property App\Models\Category::$children is deprecated in /var/www/html/src/Services/MenuService.php:112
+==============================
