@@ -138,7 +138,7 @@ class Builder implements UpdateBuilderContract
     {
         // Получаем SQL и параметры
         $sql    = $this->toSql();
-        $params = DB::getToSql()->getParams();
+        $params = array_merge(DB::getToSql()->getParams(), $this->where->getParams());
 
         // Выполняем запрос
         $stmt = Query::run($sql, $params);

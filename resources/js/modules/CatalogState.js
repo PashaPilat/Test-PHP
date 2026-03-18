@@ -61,8 +61,18 @@ export default class CatalogState {
             category: this.state.category,
             page: this.state.page,
             sort: this.state.sort,
-            ...this.state.filters
+            filters: this.state.filters
         }
     }
-
+    /**
+     * Восстановить состояние из объекта
+     */
+    setState(state) {
+        this.state = {
+            category: state.category ?? null,
+            page: state.page ?? 1,
+            sort: state.sort ?? 'default',
+            filters: state.filters ?? {}
+        }
+    }
 }

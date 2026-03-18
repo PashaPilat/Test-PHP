@@ -11,8 +11,10 @@ export default class Api {
         })
     }
 
-    getProducts(slug) {
-        return this.request('/api/products/' + slug)
+    // если slug есть → грузим конкретную категорию товаров
+    // если slug == null → грузим все товары (главная)
+    getProducts(params) {
+        return this.request('/api/products', params)
     }
 
     getCategories(params) {
@@ -22,5 +24,4 @@ export default class Api {
     updateProductCart(params) {
         return this.request('/api/cart', params)
     }
-
 }

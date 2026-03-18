@@ -38,18 +38,40 @@ export default class Catalog {
             this.state.setCategory(categorySlug)
         }
         const params = this.state.getParams()
-        this.core.api.getCategories(params).done((response) => {
-            if (!response.success) {
-                alert('Ошибка загрузки товаров')
-                return
-            }
-            document.title = response.title;
-            $('#sidebar').html(response.sidebar_html);
-            $('#product-list').html(response.products_html);
-            console.log(response);
-            this.core.history.push(this.state.state)
-        })
+
+        // проверка корректности параметров
+        if (!params || typeof params !== 'object') {
+            console.error('Некорректные параметры для загрузки каталога', params)
+            return
+        }
+
+        // если выбрана категория → грузим категорию
+        if (this.state.state.category) {
+            this.core.api.getCategories(params).done((response) => {
+                if (!response || !response.success) {
+                    alert('Ошибка загрузки товаров')
+                    return
+                }
+                document.title = response.title || 'Каталог'
+                $('#sidebar').html(response.sidebar_html || '')
+                $('#product-list').html(response.products_html || '')
+                this.core.history.push(this.state.state)
+                this.core.filters.initPriceSlider()
+            })
+        } else {
+            // главная страница → грузим все товары
+            this.core.api.getProducts(params).done((response) => {
+                if (!response || !response.success) {
+                    alert('Ошибка загрузки товаров')
+                    return
+                }
+                document.title = response.title || 'Каталог'
+                $('#product-list').html(response.products_html || '')
+                this.core.history.push(this.state.state)
+            })
+        }
     }
+
     /**
      * Восстанавливает состояние (назад/вперёд)
      */

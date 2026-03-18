@@ -69,16 +69,44 @@ class ApiController
         }
 
         $productService = new ProductService();
-        $data = $productService->getProducts($slug, $params['query']['sort'] ?? null, $params['query']['page'] ?? null);        
+
+        // получаем выбранные фильтры из запроса
+        $filters = $params['query']['filters'] ?? [];
+
+        // выборка товаров с учётом фильтров
+        $data = $productService->getProducts(
+            $slug,
+            $params['query']['sort'] ?? null,
+            $params['query']['page'] ?? null,
+            $filters
+        );
+
+        // дерево категорий
         $categories = $categoryService->getTree();
-        $filters = $productService->getFiltersForCategory($slug);
+
+        // формируем фильтры для категории с учётом выбранных значений
+        $filterData = $productService->getFiltersForCategory($slug, $filters);
+
+        // добавляем в структуру фильтров категорийные границы цены
+        if (!empty($filterData['price'])) {
+            // $filterData['price']['category_min'] = $filterData['price']['min'];
+            // $filterData['price']['category_max'] = $filterData['price']['max'];
+            // а выбранные значения берём из $filters, если они есть
+            if (!empty($filters['price']['min'])) {
+                $filterData['price']['min'] = $filters['price']['min'];
+            }
+            if (!empty($filters['price']['max'])) {
+                $filterData['price']['max'] = $filters['price']['max'];
+            }
+        }
+
         Response::json([
             'success' => true,
             'currentCategory' => $category,
             'sidebar_html' => View::renderPartial('partials/sidebar', [
                 'categories' => $categories,
                 'currentCategory' => $category,
-                'filters' => $filters
+                'filters' => $filterData
             ]),
             'products_html' => View::renderPartial('catalog/partials/products', [
                 'products' => $data['products']
@@ -86,6 +114,7 @@ class ApiController
             'title' => $category->name,
         ]);
     }
+
 
     /**
      * Возвращает данные для страницы категории.

@@ -84,7 +84,7 @@ class ProductService
 
         $product = new Product();
         $product->fill($row);
-
+        DB::update('products')->set(['views' => $product->views + 1])->where('id', $product->id, WhereOperator::EQ)->exec();
         // атрибуты товара
         $attrRows = DB::select([
             'pa.id',
@@ -138,10 +138,10 @@ class ProductService
      * @param string|null $categorySlug Слаг категории
      * @param string|null $sort Тип сортировки
      * @param int|null $page Номер страницы
-     *
+     * @param array $filters
      * @return array
      */
-    public function getProducts(?string $categorySlug, ?string $sort = null, ?int $page = null): array
+    public function getProducts(?string $categorySlug, ?string $sort = null, ?int $page = null, array $filters = []): array
     {
         // базовые поля продукта
         $fields = [
@@ -184,6 +184,27 @@ class ProductService
             $query->join(['categories', 'c'], 'c.id', 'cp.category_id');
             $query->where('c.slug', $categorySlug, WhereOperator::EQ);
         }
+        // --- применяем фильтры ---
+        if (!empty($filters['price'])) {
+            $min = (float)($filters['price']['min'] ?? 0);
+            $max = (float)($filters['price']['max'] ?? 0);
+            if ($min > 0 || $max > 0) {
+                $query->where('p.price', $min, WhereOperator::GTE);
+                if ($max > 0) {
+                    $query->where('p.price', $max, WhereOperator::LTE);
+                }
+            }
+        }
+
+        foreach ($filters as $key => $val) {
+            if ($key === 'price') continue;
+            if (!empty($val)) {
+                $ids = is_array($val) ? $val : [$val];
+                $query->join(['product_attributes', 'pa_' . $key], 'pa_' . $key . '.product_id', 'p.id');
+                $query->where('pa_' . $key . '.attribute_id', (int)$key, WhereOperator::EQ);
+                $query->where('pa_' . $key . '.id', $ids, WhereOperator::IN);
+            }
+        }
 
         // сортировка
         if ($sort !== null) {
@@ -201,9 +222,7 @@ class ProductService
 
         return [
             'products' => $products,
-            'pagination' => [
-                'page' => $page ?? 1
-            ]
+            'pagination' => ['page' => $page ?? 1]
         ];
     }
 
@@ -219,9 +238,10 @@ class ProductService
      * - attributes_with_count (для списка атрибутов и их значений)
      *
      * @param string $categorySlug Слаг категории
+     * @param array $selectedFilters
      * @return array Структура фильтра
      */
-    public function getFiltersForCategory(string $categorySlug): array
+    public function getFiltersForCategory(string $categorySlug, array $selectedFilters = []): array
     {
         // Получаем данные по категории (min/max цены)
         $categoryRow = DB::select(['c.id', 'c.min_price', 'c.max_price'])
@@ -231,8 +251,10 @@ class ProductService
 
         $filters = [
             'price' => [
-                'min' => $categoryRow['min_price'] ?? 0,
-                'max' => $categoryRow['max_price'] ?? 0,
+                'category_min' => $categoryRow['min_price'] ?? 0,
+                'category_max' => $categoryRow['max_price'] ?? 0,
+                'min' => $selectedFilters['price']['min'] ?? ($categoryRow['min_price'] ?? 0),
+                'max' => $selectedFilters['price']['max'] ?? ($categoryRow['max_price'] ?? 0),
             ],
             'attributes' => []
         ];
@@ -270,10 +292,18 @@ class ProductService
                             $grouped[$val] = [
                                 'title' => $val,
                                 'description' => $row['description'],
-                                'value' => []
+                                'value' => [],
+                                'selected' => false
                             ];
                         }
                         $grouped[$val]['value'][] = $row['id'];
+                        // отмечаем выбранные
+                        if (
+                            !empty($selectedFilters[$attr['id']]) &&
+                            in_array($row['id'], (array)$selectedFilters[$attr['id']])
+                        ) {
+                            $grouped[$val]['selected'] = true;
+                        }
                     }
                     $values = array_values($grouped);
                 }

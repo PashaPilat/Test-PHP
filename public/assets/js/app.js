@@ -3100,10 +3100,13 @@ var Api = /*#__PURE__*/function () {
         dataType: 'json'
       });
     }
+
+    // если slug есть → грузим конкретную категорию товаров
+    // если slug == null → грузим все товары (главная)
   }, {
     key: "getProducts",
-    value: function getProducts(slug) {
-      return this.request('/api/products/' + slug);
+    value: function getProducts(params) {
+      return this.request('/api/products', params);
     }
   }, {
     key: "getCategories",
@@ -3133,6 +3136,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ HistoryManager)
 /* harmony export */ });
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
 function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
 function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
@@ -3175,13 +3184,30 @@ var HistoryManager = /*#__PURE__*/function () {
   }, {
     key: "buildUrl",
     value: function buildUrl(state) {
-      var url = '/catalog';
-      if (state.category) {
-        url += '/' + state.category;
-      }
+      // если категория не выбрана → главная страница
+      var url = state.category ? "/catalog/".concat(state.category) : '/';
       var params = new URLSearchParams();
       if (state.page > 1) params.set('page', state.page);
       if (state.sort !== 'default') params.set('sort', state.sort);
+
+      // сериализация фильтров
+      if (state.filters) {
+        for (var _i = 0, _Object$entries = Object.entries(state.filters); _i < _Object$entries.length; _i++) {
+          var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
+            key = _Object$entries$_i[0],
+            val = _Object$entries$_i[1];
+          if (_typeof(val) === 'object') {
+            for (var _i2 = 0, _Object$entries2 = Object.entries(val); _i2 < _Object$entries2.length; _i2++) {
+              var _Object$entries2$_i = _slicedToArray(_Object$entries2[_i2], 2),
+                subKey = _Object$entries2$_i[0],
+                subVal = _Object$entries2$_i[1];
+              params.set("filters[".concat(key, "][").concat(subKey, "]"), subVal);
+            }
+          } else {
+            params.set("filters[".concat(key, "]"), val);
+          }
+        }
+      }
       var query = params.toString();
       return query ? "".concat(url, "?").concat(query) : url;
     }
@@ -3446,18 +3472,40 @@ var Catalog = /*#__PURE__*/function () {
         this.state.setCategory(categorySlug);
       }
       var params = this.state.getParams();
-      this.core.api.getCategories(params).done(function (response) {
-        if (!response.success) {
-          alert('Ошибка загрузки товаров');
-          return;
-        }
-        document.title = response.title;
-        (0,jquery__WEBPACK_IMPORTED_MODULE_0__["default"])('#sidebar').html(response.sidebar_html);
-        (0,jquery__WEBPACK_IMPORTED_MODULE_0__["default"])('#product-list').html(response.products_html);
-        console.log(response);
-        _this.core.history.push(_this.state.state);
-      });
+
+      // проверка корректности параметров
+      if (!params || _typeof(params) !== 'object') {
+        console.error('Некорректные параметры для загрузки каталога', params);
+        return;
+      }
+
+      // если выбрана категория → грузим категорию
+      if (this.state.state.category) {
+        this.core.api.getCategories(params).done(function (response) {
+          if (!response || !response.success) {
+            alert('Ошибка загрузки товаров');
+            return;
+          }
+          document.title = response.title || 'Каталог';
+          (0,jquery__WEBPACK_IMPORTED_MODULE_0__["default"])('#sidebar').html(response.sidebar_html || '');
+          (0,jquery__WEBPACK_IMPORTED_MODULE_0__["default"])('#product-list').html(response.products_html || '');
+          _this.core.history.push(_this.state.state);
+          _this.core.filters.initPriceSlider();
+        });
+      } else {
+        // главная страница → грузим все товары
+        this.core.api.getProducts(params).done(function (response) {
+          if (!response || !response.success) {
+            alert('Ошибка загрузки товаров');
+            return;
+          }
+          document.title = response.title || 'Каталог';
+          (0,jquery__WEBPACK_IMPORTED_MODULE_0__["default"])('#product-list').html(response.products_html || '');
+          _this.core.history.push(_this.state.state);
+        });
+      }
     }
+
     /**
      * Восстанавливает состояние (назад/вперёд)
      */
@@ -3573,9 +3621,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ CatalogState)
 /* harmony export */ });
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
-function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
-function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
 function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
 function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
 function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
@@ -3652,11 +3697,26 @@ var CatalogState = /*#__PURE__*/function () {
   }, {
     key: "getParams",
     value: function getParams() {
-      return _objectSpread({
+      return {
         category: this.state.category,
         page: this.state.page,
-        sort: this.state.sort
-      }, this.state.filters);
+        sort: this.state.sort,
+        filters: this.state.filters
+      };
+    }
+    /**
+     * Восстановить состояние из объекта
+     */
+  }, {
+    key: "setState",
+    value: function setState(state) {
+      var _state$category, _state$page, _state$sort, _state$filters;
+      this.state = {
+        category: (_state$category = state.category) !== null && _state$category !== void 0 ? _state$category : null,
+        page: (_state$page = state.page) !== null && _state$page !== void 0 ? _state$page : 1,
+        sort: (_state$sort = state.sort) !== null && _state$sort !== void 0 ? _state$sort : 'default',
+        filters: (_state$filters = state.filters) !== null && _state$filters !== void 0 ? _state$filters : {}
+      };
     }
   }]);
 }();
@@ -3702,14 +3762,19 @@ var Filters = /*#__PURE__*/function () {
     value: function initPriceSlider() {
       var core = this.core;
       var slider = document.getElementById('slider-range');
+      if (!slider) {
+        return;
+      }
+      var minLimit = parseFloat((0,jquery__WEBPACK_IMPORTED_MODULE_0__["default"])('#range1').attr('min')) || 0;
+      var maxLimit = parseFloat((0,jquery__WEBPACK_IMPORTED_MODULE_0__["default"])('#range2').attr('max')) || 0;
       var min = parseFloat((0,jquery__WEBPACK_IMPORTED_MODULE_0__["default"])('#range1').val());
       var max = parseFloat((0,jquery__WEBPACK_IMPORTED_MODULE_0__["default"])('#range2').val());
       nouislider__WEBPACK_IMPORTED_MODULE_1__["default"].create(slider, {
         start: [min, max],
         connect: true,
         range: {
-          min: min,
-          max: max
+          min: minLimit,
+          max: maxLimit
         },
         step: 1
       });

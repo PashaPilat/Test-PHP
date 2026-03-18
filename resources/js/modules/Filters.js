@@ -15,6 +15,11 @@ export default class Filters {
     initPriceSlider() {
         const core = this.core
         const slider = document.getElementById('slider-range')
+        if (!slider) {
+            return
+        }
+        const minLimit = parseFloat($('#range1').attr('min')) || 0
+        const maxLimit = parseFloat($('#range2').attr('max')) || 0
         const min = parseFloat($('#range1').val())
         const max = parseFloat($('#range2').val())
 
@@ -22,11 +27,12 @@ export default class Filters {
             start: [min, max],
             connect: true,
             range: {
-                min: min,
-                max: max
+                min: minLimit,
+                max: maxLimit
             },
             step: 1
         })
+
 
         // обновляем инпуты при движении ползунков
         slider.noUiSlider.on('update', function (values) {
